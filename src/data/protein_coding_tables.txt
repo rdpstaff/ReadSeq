@@ -1,0 +1,357 @@
+transl_table=1 The Standard Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA * Ter      TGA * Ter
+TTG L Leu i    TCG S Ser      TAG * Ter      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu i    CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile      ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile      ACC T Thr      AAC N Asn      AGC S Ser
+ATA I Ile      ACA T Thr      AAA K Lys      AGA R Arg
+ATG M Met i    ACG T Thr      AAG K Lys      AGG R Arg
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val i    GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=2 The Vertebrate Mitochondrial Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA * Ter      TGA W Trp
+TTG L Leu      TCG S Ser      TAG * Ter      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu      CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile i    ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile i    ACC T Thr      AAC N Asn      AGC S Ser
+ATA M Met i    ACA T Thr      AAA K Lys      AGA * Ter
+ATG M Met i    ACG T Thr      AAG K Lys      AGG * Ter
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val i    GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=3 The Yeast Mitochondrial Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA * Ter      TGA W Trp
+TTG L Leu      TCG S Ser      TAG * Ter      TGG W Trp
+
+CTT T Thr      CCT P Pro      CAT H His      CGT R Arg
+CTC T Thr      CCC P Pro      CAC H His      CGC R Arg
+CTA T Thr      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG T Thr      CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile      ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile      ACC T Thr      AAC N Asn      AGC S Ser
+ATA M Met i    ACA T Thr      AAA K Lys      AGA R Arg
+ATG M Met i    ACG T Thr      AAG K Lys      AGG R Arg
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val      GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=4 The Mold, Protozoan, and Coelenterate Mitochondrial Code and the Mycoplasma/Spiroplasma Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu i    TCA S Ser      TAA * Ter      TGA W Trp
+TTG L Leu i    TCG S Ser      TAG * Ter      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu i    CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile i    ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile i    ACC T Thr      AAC N Asn      AGC S Ser
+ATA I Ile i    ACA T Thr      AAA K Lys      AGA R Arg
+ATG M Met i    ACG T Thr      AAG K Lys      AGG R Arg
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val i    GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=5 The Invertebrate Mitochondrial Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA * Ter      TGA W Trp
+TTG L Leu i    TCG S Ser      TAG * Ter      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu      CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile i    ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile i    ACC T Thr      AAC N Asn      AGC S Ser
+ATA M Met i    ACA T Thr      AAA K Lys      AGA S Ser
+ATG M Met i    ACG T Thr      AAG K Lys      AGG S Ser
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val i    GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=6 The Ciliate, Dasycladacean and Hexamita Nuclear Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA Q Gln      TGA * Ter
+TTG L Leu      TCG S Ser      TAG Q Gln      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu      CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile      ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile      ACC T Thr      AAC N Asn      AGC S Ser
+ATA I Ile      ACA T Thr      AAA K Lys      AGA R Arg
+ATG M Met i    ACG T Thr      AAG K Lys      AGG R Arg
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val      GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=9 The Echinoderm and Flatworm Mitochondrial Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA * Ter      TGA W Trp
+TTG L Leu      TCG S Ser      TAG * Ter      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu      CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile      ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile      ACC T Thr      AAC N Asn      AGC S Ser
+ATA I Ile      ACA T Thr      AAA N Asn      AGA S Ser
+ATG M Met i    ACG T Thr      AAG K Lys      AGG S Ser
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val i    GCG A Ala      GAG E Glu      GGG G Gly
+
+
+transl_table=10 The Euplotid Nuclear Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA * Ter      TGA C Cys
+TTG L Leu      TCG S Ser      TAG * Ter      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu      CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile      ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile      ACC T Thr      AAC N Asn      AGC S Ser
+ATA I Ile      ACA T Thr      AAA K Lys      AGA R Arg
+ATG M Met i    ACG T Thr      AAG K Lys      AGG R Arg
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val      GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=11 The Bacterial, Archaeal and Plant Plastid Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA * Ter      TGA * Ter
+TTG L Leu i    TCG S Ser      TAG * Ter      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu i    CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile i    ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile i    ACC T Thr      AAC N Asn      AGC S Ser
+ATA I Ile i    ACA T Thr      AAA K Lys      AGA R Arg
+ATG M Met i    ACG T Thr      AAG K Lys      AGG R Arg
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val i    GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=12 The Alternative Yeast Nuclear Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA * Ter      TGA * Ter
+TTG L Leu      TCG S Ser      TAG * Ter      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG S Ser i    CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile      ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile      ACC T Thr      AAC N Asn      AGC S Ser
+ATA I Ile      ACA T Thr      AAA K Lys      AGA R Arg
+ATG M Met i    ACG T Thr      AAG K Lys      AGG R Arg
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val      GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=13 The Ascidian Mitochondrial Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA * Ter      TGA W Trp
+TTG L Leu i    TCG S Ser      TAG * Ter      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu      CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile      ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile      ACC T Thr      AAC N Asn      AGC S Ser
+ATA M Met i    ACA T Thr      AAA K Lys      AGA G Gly
+ATG M Met i    ACG T Thr      AAG K Lys      AGG G Gly
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val i    GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=14 The Alternative Flatworm Mitochondrial Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA Y Tyr      TGA W Trp
+TTG L Leu      TCG S Ser      TAG * Ter      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu      CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile      ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile      ACC T Thr      AAC N Asn      AGC S Ser
+ATA I Ile      ACA T Thr      AAA N Asn      AGA S Ser
+ATG M Met i    ACG T Thr      AAG K Lys      AGG S Ser
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val      GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=15 Blepharisma Nuclear Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA * Ter      TGA * Ter
+TTG L Leu      TCG S Ser      TAG Q Gln      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu      CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile      ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile      ACC T Thr      AAC N Asn      AGC S Ser
+ATA I Ile      ACA T Thr      AAA K Lys      AGA R Arg
+ATG M Met i    ACG T Thr      AAG K Lys      AGG R Arg
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val      GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=16 Chlorophycean Mitochondrial Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA * Ter      TGA * Ter
+TTG L Leu      TCG S Ser      TAG L Leu      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu      CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile      ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile      ACC T Thr      AAC N Asn      AGC S Ser
+ATA I Ile      ACA T Thr      AAA K Lys      AGA R Arg
+ATG M Met i    ACG T Thr      AAG K Lys      AGG R Arg
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val      GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=21 Trematode Mitochondrial Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA S Ser      TAA * Ter      TGA W Trp
+TTG L Leu      TCG S Ser      TAG * Ter      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu      CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile      ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile      ACC T Thr      AAC N Asn      AGC S Ser
+ATA M Met      ACA T Thr      AAA N Asn      AGA S Ser
+ATG M Met i    ACG T Thr      AAG K Lys      AGG S Ser
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val i    GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=22 Scenedesmus obliquus mitochondrial Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA L Leu      TCA * Ter      TAA * Ter      TGA * Ter
+TTG L Leu      TCG S Ser      TAG L Leu      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu      CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile      ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile      ACC T Thr      AAC N Asn      AGC S Ser
+ATA I Ile      ACA T Thr      AAA K Lys      AGA R Arg
+ATG M Met i    ACG T Thr      AAG K Lys      AGG R Arg
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val      GCG A Ala      GAG E Glu      GGG G Gly
+
+transl_table=23 Thraustochytrium Mitochondrial Code
+TTT F Phe      TCT S Ser      TAT Y Tyr      TGT C Cys
+TTC F Phe      TCC S Ser      TAC Y Tyr      TGC C Cys
+TTA * Ter      TCA S Ser      TAA * Ter      TGA * Ter
+TTG L Leu      TCG S Ser      TAG * Ter      TGG W Trp
+
+CTT L Leu      CCT P Pro      CAT H His      CGT R Arg
+CTC L Leu      CCC P Pro      CAC H His      CGC R Arg
+CTA L Leu      CCA P Pro      CAA Q Gln      CGA R Arg
+CTG L Leu      CCG P Pro      CAG Q Gln      CGG R Arg
+
+ATT I Ile i    ACT T Thr      AAT N Asn      AGT S Ser
+ATC I Ile      ACC T Thr      AAC N Asn      AGC S Ser
+ATA I Ile      ACA T Thr      AAA K Lys      AGA R Arg
+ATG M Met i    ACG T Thr      AAG K Lys      AGG R Arg
+
+GTT V Val      GCT A Ala      GAT D Asp      GGT G Gly
+GTC V Val      GCC A Ala      GAC D Asp      GGC G Gly
+GTA V Val      GCA A Ala      GAA E Glu      GGA G Gly
+GTG V Val i    GCG A Ala      GAG E Glu      GGG G Gly  

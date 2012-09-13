@@ -1,0 +1,113 @@
+LOCUS       S000349357              1437 bp    rRNA    linear   BCT 11-May-2004
+DEFINITION  uncultured Chlorobi bacterium; SM2A03.
+ACCESSION   AF445706 REGION: <1..>1437
+SOURCE      uncultured Chlorobi bacterium
+  ORGANISM  uncultured Chlorobi bacterium
+            Root; Bacteria; "Chlorobi"; "Chlorobia"; Chlorobiales; 
+            Chlorobiaceae; Chloroherpeton.
+REFERENCE   1 (bases 1 to 1437)
+  AUTHORS   Bonheyo G.T., Fouke B.W., Frias-Lopez J., Sanzenbacher B.;
+  TITLE     Microbial 16S rRNA diversity within travertine depositional facies 
+            from 73 degrees to 25 degreec C at Angel Terrace, Mammoth Hot 
+            Springs, Yellowstone National Park, USA
+  JOURNAL   Unpublished.
+REFERENCE   2 (bases 1 to 1437)
+  AUTHORS   Bonheyo G.T., Fouke B.W., Frias-Lopez J., Sanzenbacher B.;
+  TITLE     ;
+  JOURNAL   Submitted (08-NOV-2001) to the EMBL/GenBank/DDBJ databases. 
+            Geology, University of Illinois, Urbana-Champaign, 245 Natural 
+            History Building / 1301 W. Green Street, Urbana, IL 61801, USA
+COMMENT     Genbank: AF445706
+FEATURES             Location/Qualifiers
+     source          1..1437
+                     /db_xref="taxon:156405"
+                     /mol_type="genomic DNA"
+                     /organism="uncultured Chlorobi bacterium"
+                     /clone="SM2A03"
+                     /environmental_sample=""
+     rRNA            <1..>1437
+                     /product="16S ribosomal RNA"
+ORIGIN
+        1 gagtttgatc ctggctcagg acgaacgctg gcggcgtgcc taacacatgc aagccaaagg
+       61 aaagtagcaa tatgagtact tggcgcaagg gtgcgtaatg tataggttat ctacccttcg
+      121 gttcgggata acttcgcgaa agcgaagata ataccggata ttgaggagac ttgaaagatt
+      181 tatcgccgaa ggatgagctt atatcccatc aggtagttgg tagggtaaaa gcctaccaag
+      241 cctacgacgg gtagctggtc tgagaggatg atcagccaca ctggaactga gacacggtcc
+      301 agactcctac gggaggcagc agtgaggaat attgctcaat gggtgaaagc ctgaagcagc
+      361 aacgccgcgt gaacgatgaa ggtcttcgga ttgtaaagtt cttttgcagg ggacgaaaaa
+      421 ctcgctttgc gagtctgacg gtactctgcg aataagccac ggctaactct gtgccagcag
+      481 ccgcggtgat acagaggtgg caagcgttgt ccggatttac tgggtgtaaa gggtgcgtag
+      541 gcggatttgc aagtcggggg ttaaagactc ttgcttaaca agagaaacgc cttcgatact
+      601 gcatgtctag agtgccgaag aggaaactgg aatttccggt gtagcggtgg aatgtgcaga
+      661 gatcggaagg aacaccagtg gcgaaggcag gtttgtggtc ggtaactgac gctgatgcac
+      721 gaaagcgtgg ggagcaaaca ggattagata ccctggtagt ccacgcccta aacgatggat
+      781 gctagatgtt ggacttcggt tcagtgtcgt agctaacgca gtaagcatcc cacctgggga
+      841 gtacgcgcgc aagcgtgaaa ctcaaaggaa ttgacggggg cccgcacaag cggtggagta
+      901 tgtggtttaa ttcgatgcaa cgcgaagaac cttacctagg cttgacatgc tgggtaaagc
+      961 ggatgaaagt ccgtgtccga aagggatcca gcacaggtgc tgcatggctg tcgtcagctc
+     1021 gtgtcgtgag atgttgggtt aagtcccgca acgagcgcaa cccctattgt tagttgctac
+     1081 caagtaatgt tgagcactct agcaagactg cctacgcaag tagagaggaa ggaggggatg
+     1141 acgtcaagtc ctcatggccc ttacgcctag ggccacacac gtactacaat gggtactaca
+     1201 atgggcgaag tcgcgagacg gaggtaatcc caaaaaagca ctctcagttc agatcggagt
+     1261 ctgcaactcg actccgtgaa gttggaatcg ctagtaatcg cggatcagca tgccgcggtg
+     1321 aatacgttcc cgggccttgt acacaccgcc cgtcaagcca tggaagtcat cagcgcccga
+     1381 agacgctttg cgtttaaggc gagggtggta actggggcta agtcgtaaca aggtaac
+//
+LOCUS       S002189637              1349 bp    rRNA    linear   BCT 19-Jul-2010
+DEFINITION  uncultured bacterium; Be_050.
+ACCESSION   FR667432 REGION: <1..>1349
+SOURCE      uncultured bacterium
+  ORGANISM  uncultured bacterium
+            Root; Bacteria; "Chlorobi"; "Chlorobia"; Chlorobiales; 
+            Chlorobiaceae; Chloroherpeton.
+REFERENCE   1 (bases 1 to 1349)
+  AUTHORS   Bartrons M.;
+  TITLE     ;
+  JOURNAL   Submitted (15-JUL-2010) to the EMBL/GenBank/DDBJ databases. 
+            Bartrons M., Centre for Advanced Studies of Blanes (CEAB), Spanish 
+            Council for Scientific Research (CSIC), C/ d'acces a la Cala St. 
+            Francesc, 14, 17300, SPAIN.
+REFERENCE   2
+  AUTHORS   Bartrons M.;
+  TITLE     Bacterial diversity from high mountain lake epilithic biofilms
+  JOURNAL   Unpublished.
+COMMENT     Genbank: FR667432
+FEATURES             Location/Qualifiers
+     source          1..1349
+                     /organism="uncultured bacterium"
+                     /environmental_sample=""
+                     /mol_type="genomic DNA"
+                     /country="Spain:Pyrenees, Bergus"
+                     /lat_lon="42.59 N 0.96 E"
+                     /isolation_source="high mountain lake epilithic biofilm"
+                     /collection_date="29-Jul-2009"
+                     /clone="Be_050"
+                     /db_xref="taxon:77133"
+     rRNA            <1..>1349
+                     /gene="16S rRNA"
+                     /product="16S ribosomal RNA"
+ORIGIN
+        1 acacatgcag ccaaaggaag tagcaatacg agtacttggc gtaagggtga gtaacgcata
+       61 ggtcatctgc ccttaggttc gggataactt cgcgaaagcg aagataatac cggatattga
+      121 ggaaacttga aagatttatc gcctaaggat gagcttatgt cccatcaggt agttggtagg
+      181 gtaaaagcct accaagccta cgacgggtag ctggtctgag aggatgatca gccacactgg
+      241 aactgagaca cggtccagac tcctacggga ggcagcagtg aggaatattg cgcaatgggt
+      301 gaaagcctga cgcagcaacg ccgcgtgtgc gacgaaggtc ttcggattgt aaagcacttt
+      361 tgcaggggac gaacagccta ttttatagac ctgacggtac cttgcgaata agccacggct
+      421 aactctgtgc cagcagccgc ggtgatacag aggtggcaag cgttgtccgg atttactggg
+      481 tataaagggt gcgtaggcgg acctataagt cgagcgttaa agatcttcgc ttaacgaaga
+      541 aaatgcgctc gatactgttg gtctagagtg ttagagagga aactggaatt tccggtgtag
+      601 cggtggaatg tgtagagatc ggaaggaaca ccagtggcga aggcaggttt ctggctaaca
+      661 actgacgctg aggcacgaaa gcgcgggtag caaacaggat tagataccct ggtagtccgc
+      721 gccctaaacg atggatgcta gatgtcggac ttcggttcgg tgtcgcagct aacgcattaa
+      781 gcatcccacc tgggaagtac gcgcgcaagc gtgaaactca aaggaattga cgggggcccg
+      841 cacaagcggt ggagtatgtg gtttaattcg atgcaacgcg aagaacctta cctaggcttg
+      901 acatggtagc taaggcggat gaaagtccgc gtccgaaagg gagctatcac aggtgctgca
+      961 tggctgtcgt cagctcgtgt cgtgagatgt tgggttaagt cccgcaacga gcgcaacccc
+     1021 tattgttagt tgctaccggg taatgccgag cactctagca agactgccta cgcaagtaga
+     1081 gaggaaggag gggatgacgt caagtcctca tggcccttac gcctagggca acacacgtac
+     1141 tacaatgggc attacaatgg gcgaaggcgc gagccggaga taatcccaaa aaagtgctct
+     1201 cagttcagat cggagtctgc aactcgactc cgtgaagttg gaatcgctag taatcgcagg
+     1261 tcagcatact gcggtgaata cgttcccggg ccttgtacac accgcccgtc aagccatgga
+     1321 agttatcggc gcccgaagac gcattgcgt
+//

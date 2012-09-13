@@ -1,0 +1,182 @@
+ID   FR838948; SV 1; linear; genomic DNA; STD; PRO; 1920 BP.
+XX
+AC   FR838948;
+XX
+DT   08-JUN-2011 (Rel. 109, Created)
+DT   04-OCT-2011 (Rel. 110, Last updated, Version 2)
+XX
+DE   Clostridium difficile tetW gene for tetracycline resistance protein, strain
+DE   EII11
+XX
+KW   .
+XX
+OS   Clostridium difficile
+OC   Bacteria; Firmicutes; Clostridia; Clostridiales; Clostridiaceae;
+OC   Clostridium.
+XX
+RN   [1]
+RP   1-1920
+RA   Spigaglia P.;
+RT   ;
+RL   Submitted (08-MAR-2011) to the INSDC.
+RL   Istituto Superiore di Sanita, Infectious Diseases, Viale Regina Elena 299,
+RL   00161 Rome, ITALY.
+XX
+RN   [2]
+RA   Spigaglia P., Barbanti F., Mastrantonio P.;
+RT   "Multidrug resistance in European Clostridium difficile clinical isolates";
+RL   J. Antimicrob. Chemother. 66(10):2227-2234(2011).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1920
+FT                   /organism="Clostridium difficile"
+FT                   /host="human"
+FT                   /strain="EII11"
+FT                   /mol_type="genomic DNA"
+FT                   /country="Hungary"
+FT                   /db_xref="taxon:1496"
+FT   CDS             1..1920
+FT                   /transl_table=11
+FT                   /gene="tetW"
+FT                   /product="tetracycline resistance protein"
+FT                   /db_xref="UniProtKB/TrEMBL:F8KA51"
+FT                   /protein_id="CCA30602.1"
+FT                   /translation="MKIINIGILAHVDAGKTTLTESLLYASGAISEPGSVEKGTTRTDT
+FT                   MFLERQRGITIQAAVTSFQWHRCKVNIVDTPGHMDFLAEVYRSLAVLDGAILVISAKDG
+FT                   VQAQTRILFHALRKMNIPTVIFINKIDQAGVDLQSVVQSVRDKLSADIIIKQTVSLSPE
+FT                   IVLEENTDIEAWDAVIENNDELLEKYIAGEPISREKLAREEQQRVQDASLFPVYHGSAK
+FT                   NGLGIQPLMDAVTGLFQPIGEQGGAALCGSVFKVEYTDCGQRRVYLRLYSGTLRLRDTV
+FT                   ALAGREKLKITEMRIPSKGEIVRTDTAYQGEIVILPSDSVRLNDVLGDQTRLPRKRWRE
+FT                   DPLPMLRTTIAPKTAAQRERLLDALTQLADTDPLLRCEVDSITHEIILSFLGRVQLEVV
+FT                   SALLSEKYKLETVVKEPSVIYMERPLKAASHTIHIEVPPNPFWASIGLSVTPLSLGSGV
+FT                   QYESRVSLGYLNQSFQNAVRDGIRYGLEQGLFGWNVTDCKICFEYGLYYSPVSTPADFR
+FT                   SLAPIVLEQALKESGTQLLEPYLSFILYAPQEYLSRAYHDAPKYCATIETAQVKKDEVV
+FT                   FTGEIPARCIQAYRTDLAFYTNGRSVCLTELKGYQAAVGQPVIQPRRPNSRLDKVRHMF
+FT                   QKVM"
+XX
+SQ   Sequence 1920 BP; 464 A; 486 C; 535 G; 435 T; 0 other;
+     atgaaaataa tcaatattgg aattcttgcc catgtagacg ctggaaagac gaccttgacg        60
+     gagagcctgc tatatgccag cggagccatt tcagaaccgg ggagcgtcga aaaagggaca       120
+     acgaggacgg acaccatgtt tttggagcgg cagcgtggga ttaccattca agcggcagtc       180
+     acttccttcc agtggcacag atgtaaagtt aacattgtgg atacgcccgg ccacatggat       240
+     tttttggcgg aggtgtaccg ctctttggct gttttagatg gggccatctt ggtgatctcc       300
+     gctaaagatg gcgtgcaggc ccagacccgt attctgttcc atgccctgcg gaaaatgaac       360
+     attcccaccg ttatctttat caacaagatc gaccaggctg gcgttgattt gcagagcgtg       420
+     gttcagtctg ttcgggataa gctctccgcc gatattatca tcaagcagac ggtgtcgctg       480
+     tccccggaaa tagtcctgga ggaaaatacc gacatagaag catgggatgc ggtcatcgaa       540
+     aataacgatg aattattgga aaagtatatc gcaggagaac caatcagccg ggaaaaactt       600
+     gcgcgggagg aacagcagcg ggttcaagac gcctccctgt tcccggtcta tcatggcagc       660
+     gccaaaaatg gccttggcat tcaaccgttg atggatgcgg tgacagggct gttccaaccg       720
+     attggggaac aggggggcgc cgccctatgc ggcagcgttt tcaaggttga gtacaccgat       780
+     tgcggccagc ggcgtgtcta tctacggtta tacagcggaa cgctgcgcct gcgggatacg       840
+     gtggccctgg ccgggagaga aaagctgaaa atcacagaga tgcgtattcc atccaaaggg       900
+     gaaattgttc ggacagacac cgcttatcag ggtgaaattg ttatccttcc cagcgacagc       960
+     gtgaggttaa acgatgtatt aggggaccaa acccggctcc ctcgtaaaag gtggcgcgag      1020
+     gaccccctcc ccatgctgcg gacgacgatt gcgccgaaaa cggcagcgca aagagaacgg      1080
+     ctgctggacg ctcttacgca acttgcggat actgacccgc ttttgcgttg cgaagtggat      1140
+     tccatcaccc atgagatcat tctttctttt ttgggccggg tgcagttgga ggttgtttcc      1200
+     gctttgctgt cggaaaaata caagcttgaa acagtggtaa aggaaccctc cgtcatttat      1260
+     atggagcggc cgctcaaagc agccagccac accatccata tcgaggtgcc gcccaacccg      1320
+     ttttgggcat ccataggact gtctgttaca ccactctcgc ttggctccgg tgtacaatac      1380
+     gagagccggg tttcgctggg atacttgaac cagagttttc aaaacgctgt cagggatggt      1440
+     atccgttacg ggctggagca gggcttgttc ggctggaacg taacggactg taagatttgc      1500
+     tttgaatacg ggctttatta cagtccggtc agcacgccgg cggacttccg ctcattggcc      1560
+     ccgattgtat tggaacaggc attgaaggaa tcggggacgc agctgctgga accttatctc      1620
+     tccttcatcc tctatgcgcc ccaggaatac ctttccaggg cttatcatga tgcaccgaaa      1680
+     tactgtgcca ccatcgaaac ggcccaggta aaaaaggatg aagttgtctt tactggcgag      1740
+     attcccgccc gctgtataca ggcataccgt actgatctgg ccttttacac caacgggcgg      1800
+     agcgtatgcc ttacagagct gaaaggatat caggccgctg tcggtcagcc ggtcatccag      1860
+     ccccgccgtc caaacagccg cctggacaag gtgcgccata tgtttcagaa ggtaatgtaa      1920
+//
+ID   FR838949; SV 1; linear; genomic DNA; STD; PRO; 1920 BP.
+XX
+AC   FR838949;
+XX
+DT   08-JUN-2011 (Rel. 109, Created)
+DT   04-OCT-2011 (Rel. 110, Last updated, Version 2)
+XX
+DE   Clostridium difficile tetW gene for tetracycline resistance protein, strain
+DE   CI7
+XX
+KW   .
+XX
+OS   Clostridium difficile
+OC   Bacteria; Firmicutes; Clostridia; Clostridiales; Clostridiaceae;
+OC   Clostridium.
+XX
+RN   [1]
+RP   1-1920
+RA   Spigaglia P.;
+RT   ;
+RL   Submitted (08-MAR-2011) to the INSDC.
+RL   Istituto Superiore di Sanita, Infectious Diseases, Viale Regina Elena 299,
+RL   00161 Rome, ITALY.
+XX
+RN   [2]
+RA   Spigaglia P., Barbanti F., Mastrantonio P.;
+RT   "Multidrug resistance in European Clostridium difficile clinical isolates";
+RL   J. Antimicrob. Chemother. 66(10):2227-2234(2011).
+XX
+FH   Key             Location/Qualifiers
+FH
+FT   source          1..1920
+FT                   /organism="Clostridium difficile"
+FT                   /host="human"
+FT                   /strain="CI7"
+FT                   /mol_type="genomic DNA"
+FT                   /country="Germany"
+FT                   /db_xref="taxon:1496"
+FT   CDS             1..1920
+FT                   /transl_table=11
+FT                   /gene="tetW"
+FT                   /product="tetracycline resistance protein"
+FT                   /db_xref="UniProtKB/TrEMBL:F8KA52"
+FT                   /protein_id="CCA30603.1"
+FT                   /translation="MKIINIGILAHVDAGKTTLTESLLYASGAISEPGSVEKGTTRTDT
+FT                   MFLERQRGITIQAAVTSFQWHRCKVNIVDTPGHMDFLAEVYRSLAVLDGAILVISAKDG
+FT                   VQAQTRILFHALRKMNIPTVIFINKIDQAGVDLQSVVQSVRDKLSADIIIKQTVSLSPE
+FT                   IVLEENTDIEAWDAVIENNDELLEKYIAGEPISREKLAREEQRRVQDASLFPVYYGSAK
+FT                   KGLGIQPLMDAVTGLFQPIGEQGSAALCGSVFKVEYTDCGQRRVYLRLYSGTLRLRDTV
+FT                   ALAGREKLKITEMRIPSKGEIVRTDTAYPGEIVILPSDSVRLNDVLGDPTRLPRKRWRE
+FT                   DPLPMLRTSIAPKTAAQRERLLDALTQLADTDPLLRCEVDSITHEIILSFLGRVQLEVV
+FT                   SALLSEKYKLETVVKEPTVIYMERPLKAASHTIHIEVPPNPFWASIGLSVTPLPLGSGV
+FT                   QYESRVSLGYLNQSFQNAVRDGIRYGLEQGLFGWNVTDCKICFEYGLYYSPVSTPADFR
+FT                   SLAPIVLEQALKESGTQLLEPYLSFTLYAPREYLSRAYHDAPKYCATIETVQVKKDEVV
+FT                   FTGEIPARCIQAYRTDLAFYTNGQSVCLTELKGYQAAVGKPVIQPRRPNSRLDKVRHMF
+FT                   QKVM"
+XX
+SQ   Sequence 1920 BP; 465 A; 487 C; 535 G; 433 T; 0 other;
+     atgaaaataa tcaatattgg aattcttgcc catgtagacg ctggaaagac gaccttgacg        60
+     gagagcctgc tatatgccag cggagccatt tcagaaccgg ggagcgtcga aaaagggaca       120
+     acgaggacgg acaccatgtt tttggagcgg cagcgtggga ttaccattca agcggcagtc       180
+     acttccttcc agtggcacag atgtaaagtt aacattgtgg atacgcccgg ccacatggat       240
+     tttttggcgg aggtgtaccg ctctttggct gttttagatg gggccatctt ggtgatctcc       300
+     gctaaagatg gcgtgcaggc ccagacccgt attctgttcc atgccctgcg gaaaatgaac       360
+     attcccaccg ttatctttat caacaagatc gaccaggctg gcgttgattt gcagagcgtg       420
+     gttcagtctg ttcgggataa gctctccgcc gatattatca tcaagcagac ggtgtcgctg       480
+     tccccggaaa tagtcctgga ggaaaatacc gacatagaag catgggatgc ggtcatcgaa       540
+     aataacgatg aattattgga aaagtatatc gcaggagaac caatcagccg ggaaaaactt       600
+     gcgcgggagg aacagcggcg ggttcaagac gcctccctgt tcccggtcta ttatggcagc       660
+     gccaaaaagg gccttggcat tcaaccgttg atggatgcgg tgacagggct gttccaaccg       720
+     attggggaac aggggagcgc cgccctatgc ggcagcgttt tcaaggtgga gtatacagat       780
+     tgcggccagc ggcgtgtcta tctacggcta tacagcggaa cgctgcgcct gcgggatacg       840
+     gtggccctgg ccgggagaga aaagctgaaa atcacagaga tgcgtattcc atccaaaggg       900
+     gaaattgttc ggacagacac cgcttatccg ggtgaaattg ttatccttcc cagcgacagc       960
+     gtgaggttaa acgatgtatt aggggaccca acccggctcc ctcgtaaaag gtggcgtgag      1020
+     gaccccctcc ccatgctgcg gacgtcgatt gcgccgaaaa cggcagcgca aagagaacgg      1080
+     ctgctggacg ctcttacgca acttgcggat actgacccgc ttttgcgctg cgaggtggat      1140
+     tccatcaccc atgagatcat tctttctttt ttgggccggg tgcagttgga ggttgtttcc      1200
+     gctttgctgt cggaaaaata caagcttgaa acagtggtaa aggaacccac cgtcatttat      1260
+     atggagcggc cgctcaaagc agccagccac accatccata tcgaggtgcc gcccaacccg      1320
+     ttttgggcat ccatcggact gtctgttaca ccactcccgc ttggctccgg tgtacaatac      1380
+     gagagccggg tttcgctggg atacttgaac cagagttttc aaaacgctgt cagggatggt      1440
+     atccgttacg ggctggagca gggcttgttc ggctggaacg taacggactg taagatttgc      1500
+     tttgaatacg ggctttatta cagtccggtc agcacgccgg cggacttccg ctcattggcc      1560
+     ccgattgtat tggaacaggc attgaaggaa tcagggacgc aactgctgga accttatctc      1620
+     tccttcaccc tctatgcgcc ccgggaatat ctttccaggg cttatcatga tgcaccgaaa      1680
+     tactgtgcca ccatcgaaac ggtccaggta aaaaaggatg aagttgtctt tactggcgag      1740
+     attcccgccc gctgtataca ggcataccgt actgatctgg ccttttacac caacgggcag      1800
+     agcgtatgcc ttacagaact gaaagggtat caggccgctg tcggcaagcc agtcatccag      1860
+     ccccgccgtc caaacagccg cctggacaag gtgcgccata tgtttcagaa ggtaatgtaa      1920
+//

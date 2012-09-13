@@ -1,0 +1,29 @@
+# STOCKHOLM 1.0
+
+GF040U105F9RVG         TRLILNSKAQTTVMDLARERGTVEDLELEDVSVEGHLGVRCAESGGPEPG
+#=GR GF040U105F9RVG PP 9*************************************************
+GF040U105FRBRW         TRLILNSKAQTTVMDLARERGTVEDLELKDVLVEGHLGVRCAESGGPEPG
+#=GR GF040U105FRBRW PP 9*************************************************
+GF040U105FT65L         TRLILHAKAQTTVMDLVRELGTVEDLELEDVMKVGYGDVKCVESGGPEPG
+#=GR GF040U105FT65L PP 9*************************************************
+#=GC PP_cons           9*************************************************
+#=GC RF                xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+GF040U105F9RVG         VGCAGRGVITAINFLEENGAYTEdTDYVFYDVLGDVVCGGFAMPIRENKA
+#=GR GF040U105F9RVG PP *********************988**************************
+GF040U105FRBRW         VGCAGRGVITAINFLEENGAYTEdTDYVFYDVLGDVVCGGFAMPIRENKA
+#=GR GF040U105FRBRW PP *********************988**************************
+GF040U105FT65L         VGCAGRGVITAINFLEENGAYTPdLDFVFYDVLGDVVCGGFSMPIRENKA
+#=GR GF040U105FT65L PP *********************977**************************
+#=GC PP_cons           *********************98.**************************
+#=GC RF                xxxxxxxxxxxxxxxxxxxxxxx.xxxxxxxxxxxxxxxxxxxxxxxxxx
+
+GF040U105F9RVG         KEIYIVT
+#=GR GF040U105F9RVG PP ******7
+GF040U105FRBRW         KEIYIVT
+#=GR GF040U105FRBRW PP ******7
+GF040U105FT65L         EEIYIVC
+#=GR GF040U105FT65L PP *****97
+#=GC PP_cons           ******7
+#=GC RF                xxxxxxx
+//
