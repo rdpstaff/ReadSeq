@@ -56,17 +56,28 @@ public abstract class SeqReaderCore {
         }
     }
     private boolean seekable;
+    private boolean ignoreWhitespace;
     private RandomAccessFile rawRAFile = null;
     private DataInputStream is = null;
 
     public SeqReaderCore(File seqFile) throws IOException {
+        this(seqFile, true);
+    }
+
+    public SeqReaderCore(InputStream is) throws IOException {
+        this(is, true);
+    }
+
+    public SeqReaderCore(File seqFile, boolean ignoreWhitespace) throws IOException {
         this.rawRAFile = new BufferedRandomAccessFile(seqFile, "r", 4096);
         seekable = true;
+        this.ignoreWhitespace = ignoreWhitespace;
     }
     
-    public SeqReaderCore(InputStream is) throws IOException {
+    public SeqReaderCore(InputStream is, boolean ignoreWhitespace) throws IOException {
         this.is = new DataInputStream(new BufferedInputStream(is));
         seekable = false;
+        this.ignoreWhitespace = ignoreWhitespace;
     }
 
     protected final RandomAccessFile getRawFile() throws IOException {

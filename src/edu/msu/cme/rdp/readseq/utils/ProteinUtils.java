@@ -199,14 +199,15 @@ public class ProteinUtils {
 
         for (int index = 0; index < protSeq.length(); index++) {
             char protBase = protSeq.charAt(index);
+	    int nucSeqIndex = unalignedIndex * 3;
+
+	    if (nucSeqIndex + 3 > unalignedNucSeq.length() + 1) {
+		break;
+	    }
 
             if (Character.isLetter(protBase)) {
-                int nucSeqIndex = unalignedIndex * 3;
                 char p = protBase;
 
-                if (nucSeqIndex + 3 > unalignedNucSeq.length()) {
-                    break;
-                }
                 AminoAcid aa = null;
                 if(asciiMap[bases[nucSeqIndex]] != -1 && asciiMap[bases[nucSeqIndex + 1]] != -1 && asciiMap[bases[nucSeqIndex + 2]] != -1) {
                     aa = proteinMapping[asciiMap[bases[nucSeqIndex]]][asciiMap[bases[nucSeqIndex + 1]]][asciiMap[bases[nucSeqIndex + 2]]];
@@ -219,22 +220,17 @@ public class ProteinUtils {
                         aminoAcid = 'm';
                     }
 
-                    if (aa.matches('*') && index + 1 != protSeq.length()) {
-                        if (index + 1 != protSeq.length()
-                                && Character.toLowerCase(p) != 'u') {
-                            errors++;
-                        }
-                    } else if (Character.toUpperCase(aminoAcid) != Character.toUpperCase(p)) {
+                    if (Character.toUpperCase(aminoAcid) != Character.toUpperCase(p)) {
                         errors++;
                     }
                 } else {
-                    errors++;
+		    throw new IllegalArgumentException("Failed to translate codon: " + bases[nucSeqIndex] + "" + bases[nucSeqIndex + 1] + "" + bases[nucSeqIndex + 2]);
                 }
 
                 if (Character.isUpperCase(protBase)) {
-                    nucSeq.append(Character.toUpperCase(bases[index])).append(Character.toUpperCase(bases[index + 1])).append(Character.toUpperCase(bases[index + 2]));
+                    nucSeq.append(Character.toUpperCase(bases[nucSeqIndex])).append(Character.toUpperCase(bases[nucSeqIndex + 1])).append(Character.toUpperCase(bases[nucSeqIndex + 2]));
                 } else {
-                    nucSeq.append(Character.toLowerCase(bases[index])).append(Character.toLowerCase(bases[index + 1])).append(Character.toLowerCase(bases[index + 2]));
+                    nucSeq.append(Character.toLowerCase(bases[nucSeqIndex])).append(Character.toLowerCase(bases[nucSeqIndex + 1])).append(Character.toLowerCase(bases[nucSeqIndex + 2]));
                 }
 
                 unalignedIndex++;
@@ -242,7 +238,22 @@ public class ProteinUtils {
                 nucSeq.append("---");
             } else if (protBase == '.') {
                 nucSeq.append("...");
-            }
+            } else if(protBase == '*') {
+		//So we're going to go ahead and not choke on a stop codon
+		//This has several implications, first if we see a * we can't tell if it is suppose
+		//to be a model or non-model position based only on the sequence string.  Thankfully
+		//for now HMMER3 will push *s to inserts, so we should be able to safely insert the
+		//codon in lower case
+
+		if (index + 1 != protSeq.length()) {
+		    //If this is a stop codon not at the end...that's a problem
+		    errors++;
+		}
+		unalignedIndex++;
+		nucSeq.append(Character.toLowerCase(bases[nucSeqIndex])).append(Character.toLowerCase(bases[nucSeqIndex + 1])).append(Character.toLowerCase(bases[nucSeqIndex + 2]));
+	    } else {
+		throw new IllegalArgumentException("Unexpected amino acid '" + protBase + "'");
+	    }
         }
 
         TranslateResult result = new TranslateResult();
@@ -257,6 +268,15 @@ public class ProteinUtils {
 
     public float getTranslScore(String proteinSeq, String nucSeq, SingleSeqRegion r, int translTable) {
         int errors = backTranslate(proteinSeq, nucSeq, (r.getExtends() == Extends.BEYOND_BEGIN || r.getExtends() == Extends.BEYOND_BOTH), translTable).errors;
+        return ((proteinSeq.length() - errors) / (float) proteinSeq.length());
+    }
+
+    public String getAlignedNucSeq(String alignedProtSeq, String unalignedNucSeq, boolean dontAllowInitiators, int translTable) {
+        return backTranslate(alignedProtSeq, unalignedNucSeq, dontAllowInitiators, translTable).translStr;
+    }
+
+    public float getTranslScore(String proteinSeq, String nucSeq, boolean dontAllowInitiators, int translTable) {
+        int errors = backTranslate(proteinSeq, nucSeq, dontAllowInitiators, translTable).errors;
         return ((proteinSeq.length() - errors) / (float) proteinSeq.length());
     }
 

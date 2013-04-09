@@ -27,19 +27,23 @@ import java.util.Iterator;
  *
  * @author fishjord
  */
-public class MemSeqReader implements SeqReader {
+public class MemSeqReader<E extends Sequence> implements SeqReader {
 
-    private Iterator<Sequence> seqs;
+    private Iterator<E> seqs;
 
-    public MemSeqReader(Collection<Sequence> seqs) {
-        this.seqs = seqs.iterator();
+    public MemSeqReader(Iterator<E> seqs) {
+        this.seqs = seqs;
     }
 
-    public MemSeqReader(Sequence ... seqs) {
+    public MemSeqReader(Collection<E> seqs) {
+        this(seqs.iterator());
+    }
+
+    public MemSeqReader(E ... seqs) {
         this.seqs = Arrays.asList(seqs).iterator();
     }
 
-    public Sequence readNextSequence() throws IOException {
+    public E readNextSequence() throws IOException {
         if(seqs != null && seqs.hasNext()) {
             return seqs.next();
         }
@@ -48,7 +52,7 @@ public class MemSeqReader implements SeqReader {
     }
 
     public SequenceFormat getFormat() {
-        return SequenceFormat.UNKNOWN;
+        return SequenceFormat.IN_MEMORY;
     }
 
     public void close() throws IOException {

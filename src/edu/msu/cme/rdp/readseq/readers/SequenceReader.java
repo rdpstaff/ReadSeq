@@ -102,13 +102,7 @@ public class SequenceReader implements SeqReader {
     }
 
     public Sequence readNextSequence() throws IOException {
-        Sequence s = core.readNextSequence();
-        if (s == null) {
-            return null;
-        } else {
-            s.setSeqString(SeqUtils.filterSeqString(s.getSeqString(), false));
-            return s;
-        }
+        return core.readNextSequence();
     }
 
     public void close() throws IOException {

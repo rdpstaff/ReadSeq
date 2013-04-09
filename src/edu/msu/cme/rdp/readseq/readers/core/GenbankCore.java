@@ -35,11 +35,11 @@ import java.util.logging.Logger;
 public class GenbankCore extends SeqReaderCore {
 
     public GenbankCore(File seqFile) throws IOException {
-        super(seqFile);
+        super(seqFile, false);
     }
 
     public GenbankCore(InputStream is) throws IOException {
-        super(is);
+        super(is, false);
     }
 
     public Map<String, Long> scanInternal() throws IOException {

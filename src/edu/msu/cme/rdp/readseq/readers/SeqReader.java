@@ -24,8 +24,8 @@ import java.io.IOException;
  *
  * @author fishjord
  */
-public interface SeqReader {
-    public Sequence readNextSequence() throws IOException;
+public interface SeqReader<E extends Sequence> {
+    public E readNextSequence() throws IOException;
     public SequenceFormat getFormat();
 
     public void close() throws IOException;
