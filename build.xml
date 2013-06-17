@@ -104,6 +104,8 @@
         <ivy:retrieve />
     </target>
 
+    <target name="-pre-compile" depends="resolve" />
+
     <target depends="resolve,init,compile,-pre-jar,-post-jar" description="Build JAR." name="jar">
         <property location="${build.classes.dir}" name="build.classes.dir.resolved"/>
         <pathconvert property="run.classpath.without.build.classes.dir">
