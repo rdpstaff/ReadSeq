@@ -7,7 +7,7 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="ReadSeq" default="default" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="ReadSeq" default="default" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns:j2seproject1="http://www.netbeans.org/ns/j2se-project/1" xmlns:j2seproject3="http://www.netbeans.org/ns/j2se-project/3">
     <description>Builds, tests, and runs the project ReadSeq.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
@@ -102,5 +102,36 @@
 
     <target name="resolve" description="--> retrieve dependencies with ivy" depends="init-ivy">
         <ivy:retrieve />
+    </target>
+
+    <target depends="resolve,init,compile,-pre-jar,-post-jar" description="Build JAR." name="jar">
+        <property location="${build.classes.dir}" name="build.classes.dir.resolved"/>
+        <pathconvert property="run.classpath.without.build.classes.dir">
+            <path path="${run.classpath}"/>
+            <map from="${build.classes.dir.resolved}" to=""/>
+        </pathconvert>
+        <pathconvert pathsep=" " property="jar.classpath">
+            <path path="${run.classpath.without.build.classes.dir}"/>
+            <chainedmapper>
+                <flattenmapper/>
+                <globmapper from="*" to="lib/*"/>
+            </chainedmapper>
+        </pathconvert>
+        <copy todir="${dist.dir}/lib" flatten="true">
+            <path>
+                <pathelement path="${run.classpath.without.build.classes.dir}"/>
+            </path>
+        </copy>
+        <j2seproject1:jar manifest="${manifest.file}">
+            <j2seproject1:manifest>
+                <j2seproject1:attribute name="Main-Class" value="${main.class}"/>
+                <j2seproject1:attribute name="Class-Path" value="${jar.classpath}"/>
+                <!-- if you deal with versions -->
+                <!-- j2seproject1:attribute name="Build-Version" value="${version}" / -->
+            </j2seproject1:manifest>
+        </j2seproject1:jar>
+        <echo>To run this application from the command line without Ant, try:</echo>
+        <property location="${dist.jar}" name="dist.jar.resolved"/>
+        <echo>java -jar "${dist.jar.resolved}"</echo>
     </target>
 </project>
