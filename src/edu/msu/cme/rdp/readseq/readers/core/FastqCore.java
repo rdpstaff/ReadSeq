@@ -32,8 +32,6 @@ import java.util.Map;
  * @author fishjord
  */
 public class FastqCore extends SeqReaderCore {
-    private static final char[] qualHeaderDelim = {'\n', '+'};
-    private static final char[] seqHeaderDelim = {'\n', '@'};
 
     public static interface QualityFunction {
         public byte translate(char c);
@@ -163,12 +161,12 @@ public class FastqCore extends SeqReaderCore {
     }
 
     private String parseSeq() throws IOException {
-        String str = readUntilNext("\n+").trim();
+        String str = readSeqString("\n+");
         return str;
     }
 
     private byte[] parseQualSeq() throws IOException {
-        String str = readUntilNext("\n@").trim();
+        String str = readSeqString("\n@");
         if(str == null) {
             return null;
         }

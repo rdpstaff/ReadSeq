@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -324,5 +325,26 @@ public class ProteinUtils {
         }
 
         return ret;
+    }
+
+    public static void main(String[] args) {
+        Map<Character, Integer> codonToProt = new HashMap();
+        int i = 0;
+        for(String s : "A        C        D        E        F        G        H        I        K        L        M        N        P        Q        R        S        T        V        W        Y".split("\\s+")) {
+            codonToProt.put(s.charAt(0), i);
+            System.out.println(s + " " + i);
+            i++;
+        }
+        codonToProt.put('*', -1);
+
+        char[] nucl = new char[]{'a', 'c', 'g', 't'};
+        for(char b1 : nucl) {
+            for(char b2 : nucl) {
+                for(char b3 : nucl) {
+                    Character aa = Character.toUpperCase(ProteinUtils.getInstance().translationTableMap.get(11)[asciiMap[b1]][asciiMap[b2]][asciiMap[b3]].getAminoAcid());
+                    System.out.println("bct_codons[twobit_repr('"  + b1 + "') << 4 | twobit_repr('"  + b2 + "') << 2 | twobit_repr('"  + b3 + "')] = " + codonToProt.get(aa) + "; //" + aa);
+                }
+            }
+        }
     }
 }

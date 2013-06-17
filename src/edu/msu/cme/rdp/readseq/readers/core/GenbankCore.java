@@ -35,11 +35,11 @@ import java.util.logging.Logger;
 public class GenbankCore extends SeqReaderCore {
 
     public GenbankCore(File seqFile) throws IOException {
-        super(seqFile, false);
+        super(seqFile);
     }
 
     public GenbankCore(InputStream is) throws IOException {
-        super(is, false);
+        super(is);
     }
 
     public Map<String, Long> scanInternal() throws IOException {
@@ -125,7 +125,7 @@ public class GenbankCore extends SeqReaderCore {
             return null;
         }
 
-        return new Sequence(seqid, desc, seqString.trim());
+        return new Sequence(seqid, desc, seqString.replaceAll("\\s+", ""));
     }
 
     private String parseSid() throws IOException {

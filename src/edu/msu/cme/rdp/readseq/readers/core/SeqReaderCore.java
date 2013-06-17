@@ -56,28 +56,17 @@ public abstract class SeqReaderCore {
         }
     }
     private boolean seekable;
-    private boolean ignoreWhitespace;
     private RandomAccessFile rawRAFile = null;
     private DataInputStream is = null;
 
     public SeqReaderCore(File seqFile) throws IOException {
-        this(seqFile, true);
+        this.rawRAFile = new BufferedRandomAccessFile(seqFile, "r", 4096);
+        seekable = true;
     }
 
     public SeqReaderCore(InputStream is) throws IOException {
-        this(is, true);
-    }
-
-    public SeqReaderCore(File seqFile, boolean ignoreWhitespace) throws IOException {
-        this.rawRAFile = new BufferedRandomAccessFile(seqFile, "r", 4096);
-        seekable = true;
-        this.ignoreWhitespace = ignoreWhitespace;
-    }
-    
-    public SeqReaderCore(InputStream is, boolean ignoreWhitespace) throws IOException {
         this.is = new DataInputStream(new BufferedInputStream(is));
         seekable = false;
-        this.ignoreWhitespace = ignoreWhitespace;
     }
 
     protected final RandomAccessFile getRawFile() throws IOException {
@@ -87,12 +76,12 @@ public abstract class SeqReaderCore {
 
         return rawRAFile;
     }
-    
+
     protected final DataInput getDataInput() {
         if(seekable) {
             return rawRAFile;
         } else {
-            return is;            
+            return is;
         }
     }
 
@@ -103,11 +92,11 @@ public abstract class SeqReaderCore {
             return is.read(buf);
         }
     }
-    
+
     public boolean isSeekable() {
         return seekable;
     }
-    
+
     /**
      * This function indexes the sequence file and returns to the start of the
      * first sequence when complete
@@ -168,7 +157,7 @@ public abstract class SeqReaderCore {
             is.close();
         }
     }
-    
+
     private int read() throws IOException {
         if(seekable) {
             return rawRAFile.read();
@@ -176,12 +165,12 @@ public abstract class SeqReaderCore {
             return is.read();
         }
     }
-    
+
     public long getPosition() {
         if(!seekable) {
             return -1;
         }
-        
+
         try {
             return rawRAFile.getFilePointer();
         } catch (IOException e) {
@@ -270,7 +259,64 @@ public abstract class SeqReaderCore {
         if(ret.length() == 0) {
             return null;
         }
-        
+
+        return ret.toString();
+    }
+
+    protected String readSeqString(String delimStr) throws IOException {
+        StringBuilder ret = new StringBuilder();
+
+        int checkIndex = 0, r;
+        char c;
+        char[] delim = delimStr.toCharArray();
+        int delimLength = 0;
+        for(int index = 0;index < delim.length;index++) {
+            c = delim[index];
+            if(!(c == '\n' || c == ' ' || c == '\t')) {
+                delimLength += 1;
+            }
+        }
+
+        char prev = 0;
+
+        int i = 0;
+        while ((r = read()) != -1) {
+            c = (char) r;
+
+            if ((c == '\r' && prev == '\n') || (c == '\n' && prev == '\r')) {
+                prev = c;
+                continue;
+            }
+
+            prev = c;
+
+            if (c == '\r') {
+                c = '\n';
+            }
+
+            if(!(c == '\n' || c == ' ' || c == '\t')) {
+                ret.append(c);
+            }
+
+            if (c == delim[checkIndex]) {
+                checkIndex++;
+                if (checkIndex == delim.length) {
+                    return ret.substring(0, ret.length() - delimLength);
+                }
+            } else {
+                if (delim[0] == c) { //Weird case where a first delim might be the character that fails the current delim check
+                    //Don't need to worry about checking the delim length cause if it was a match...we'd have returned when we first detected it
+                    checkIndex = 1;
+                } else {
+                    checkIndex = 0;
+                }
+            }
+        }
+
+        if(ret.length() == 0) {
+            return null;
+        }
+
         return ret.toString();
     }
 }

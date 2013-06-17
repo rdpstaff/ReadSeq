@@ -64,5 +64,29 @@ public class SequenceParserTest {
 
         parser.close();
     }
+    /**
+     * Test of getNextSequence method, of class SequenceReader.
+     */
+    @Test
+    public void testWhitespace() throws Exception {
+        SequenceReader parser = new SequenceReader(new FileInputStream("test/test_1.fa"));
+
+        Sequence seq = parser.readNextSequence();
+        assertNotNull(seq);
+        assertEquals("test0", seq.getSeqName());
+        assertEquals("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", seq.getSeqString());
+
+        seq = parser.readNextSequence();
+        assertNotNull(seq);
+        assertEquals("test1", seq.getSeqName());
+        assertEquals("aAcCgGtTuUmMrRwWsSyYkKvVhHdDbBxXnN-.~", seq.getSeqString());
+
+        seq = parser.readNextSequence();
+        assertNotNull(seq);
+        assertEquals("test2<I_Hate_You>", seq.getSeqName());
+        assertEquals("ccccccccccccccccccccccccccccccccccccc", seq.getSeqString());
+
+        parser.close();
+    }
 
 }

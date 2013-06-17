@@ -44,12 +44,12 @@ public class FastaCore extends SeqReaderCore {
 
     public Map<String, Long> scanInternal() throws IOException {
         RandomAccessFile seqFile = super.getRawFile();
-        
+
         seqFile.seek(0);
         readUntilNext('>');
         long firstHeader = seqFile.getFilePointer();
         long lastHeader = seqFile.getFilePointer();
-        
+
         Map<String, Long> seqIndex = new LinkedHashMap();
 
         while (seqFile.getFilePointer() != seqFile.length()) {
@@ -68,7 +68,7 @@ public class FastaCore extends SeqReaderCore {
 
     public int scanToStream(DataOutputStream out) throws IOException {
         RandomAccessFile seqFile = super.getRawFile();
-        
+
         seqFile.seek(0);
         readUntilNext('>');
         long firstHeader = seqFile.getFilePointer();
