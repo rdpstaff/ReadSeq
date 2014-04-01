@@ -32,7 +32,7 @@ public class ReadSeqMain {
     public static void main(String [] args) throws Exception {
         String usage = "USAGE: ReadSeqMain <subcommand> <subcommand args ...>" +                
                 "\n\trandom-sample  - random select a subset or subregion of sequences" +
-                "\n\treverse-comp   - reverse complment seqeunces" +
+                "\n\treverse-comp   - reverse complement sequences" +
                 "\n\trm-dupseq      - remove identical or substring of sequences" + 
                 "\n\tselect-seqs    - select or deselect sequences from a file" +
                 "\n\tsplit          - split sequences" +  

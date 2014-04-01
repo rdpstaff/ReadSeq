@@ -9,7 +9,7 @@ Sequence reading library developed by the Ribosomal Database Project.  Can handl
 
 USAGE: ReadSeqMain <subcommand> <subcommand args ...>
 	random-sample  - random select a subset or subregion of sequences
-	reverse-comp   - reverse complment seqeunces
+	reverse-comp   - reverse complement sequences 
 	rm-dupseq      - remove identical or substring of sequences
 	select-seqs    - select or deselect sequences from a file
 	split          - split sequences
