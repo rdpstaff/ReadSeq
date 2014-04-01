@@ -31,7 +31,73 @@ import static org.junit.Assert.*;
  * @author fishjord
  */
 public class SeqFileReaderTest {
-    
+
+    @Test
+    public void testReadSTKFile() throws IOException {
+        String exp1Id = "GF040U105F9RVG";
+        String exp1Seq = "TRLILNSKAQTTVMDLARERGTVEDLELEDVSVEGHLGVRCAESGGPEPGVGCAGRGVITAINFLEENGAYTEdTDYVFYDVLGDVVCGGFAMPIRENKAKEIYIVT";
+
+        String exp2Id = "GF040U105FRBRW";
+        String exp2Seq = "TRLILNSKAQTTVMDLARERGTVEDLELKDVLVEGHLGVRCAESGGPEPGVGCAGRGVITAINFLEENGAYTEdTDYVFYDVLGDVVCGGFAMPIRENKAKEIYIVT";
+
+        SequenceReader seqFileReader = new SequenceReader(new File("test/test.sto"));
+        Sequence seq1 = seqFileReader.readNextSequence();
+
+        assertEquals(exp1Id, seq1.getSeqName());
+        assertEquals(exp1Seq, seq1.getSeqString());
+
+        seq1 = seqFileReader.readNextSequence();
+
+        assertEquals(exp2Id, seq1.getSeqName());
+        assertEquals(exp2Seq, seq1.getSeqString());
+
+        assertEquals("GF040U105FT65L", seqFileReader.readNextSequence().getSeqName());
+        assertEquals("#=GC PP_cons", seqFileReader.readNextSequence().getSeqName());
+        assertEquals("#=GC RF", seqFileReader.readNextSequence().getSeqName());
+    }
+
+    @Test
+    public void testReadSFFFile() throws IOException {
+        String exp1Id = "GF040U105F9RVG";
+        String exp1Seq = "ACGAGTGCGTTGCGACCCGAAGGCCGACTCCACCCGCCTGATTCTGAACAGCAAAGCTCAAACCACGGTTATGGACCTGGCCCGTGAACGGGGAACGGTGGAGGATCTGGAACTGGAAGATGTGTCGGTGGAAGGTCATCTGGGGGTGCGCTGTGCGGAGTCCGGCGGCCCGGAACCGGGTGTGGGCTGTGCCGGACGGGGTGTGATCACCGCCATTTAACTTTCTTGAGGAAAACGGTGCTTACACCGAGGATACAGATTATGTCTTCTATGATGTTCTGGGTGATGTAGTCTGCGGGGGATTTGCCATGCCGATCCGTGAGAACAAAGCCAAGGAAATCTATATCGTCACCTCCGGCGAGATGATGGCC";
+
+        String exp2Id = "GF040U105FRBRW";
+        String exp2Seq = "ACGAGTGCGTTGCGATCCGAAGGCTGACTCCACCCGCCTGATTCTGAACAGCAAAGCTCAAACCACGGTTATGGACCTGGCTCGTGAACGGGGAACGGTGGAGGATCTGGAACTGAAAGATGTGTTGGTGGAAGGTCATCTGGGGGTGCGCTGTGCGGAGTCCGGCGGCCCGGAACCGGGTGTGGGCTGTGCCGGACGGGGTGTGATCACCGCCATTAACTTTCTTGAGGAAAACGGTGCTTACACCGAGGATACAGATTATGTCTTCTATGATGTTCTGGGTGATGTAGTCTGCGGGGGATTTGCCATGCCGATCCGTGAGAACAAAGCCAAGGAAATCTATATCGTCACCTCCGGTGAAATGATGGCC";
+
+        SequenceReader seqFileReader = new SequenceReader(new File("test/454Reads.sff"));
+        Sequence seq1 = seqFileReader.readNextSequence();
+
+        assertEquals(exp1Id, seq1.getSeqName());
+        assertEquals(exp1Seq, seq1.getSeqString());
+
+        seq1 = seqFileReader.readNextSequence();
+
+        assertEquals(exp2Id, seq1.getSeqName());
+        assertEquals(exp2Seq, seq1.getSeqString());
+
+    }
+
+    @Test
+    public void testReadStream() throws IOException {
+        String seqs = ">test1\nacgt\n>test2\ngggg";
+        String exp1Id = "test1";
+        String exp1Seq = "acgt";
+
+        String exp2Id = "test2";
+        String exp2Seq = "gggg";
+
+        SequenceReader seqFileReader = new SequenceReader(new BufferedInputStream(new ByteArrayInputStream(seqs.getBytes())));
+        Sequence seq1 = seqFileReader.readNextSequence();
+
+        assertEquals(exp1Id, seq1.getSeqName());
+        assertEquals(exp1Seq, seq1.getSeqString());
+
+        seq1 = seqFileReader.readNextSequence();
+
+        assertEquals(exp2Id, seq1.getSeqName());
+        assertEquals(exp2Seq, seq1.getSeqString());
+    }
+
     @Test
     public void testReadFastaFile() throws IOException {
         SequenceReader reader = new SequenceReader(new File("test/test.fa"));
@@ -44,133 +110,67 @@ public class SeqFileReaderTest {
         s = reader.readNextSequence();
         assertEquals("test1", s.getSeqName());
         assertEquals("aAcCgGtTuUmMrRwWsSyYkKvVhHdDbBxXnN-.~", s.getSeqString());
-        
+
         reader.close();
     }
-    
-    
+
+
     @Test
     public void testReadFastqFile() throws IOException {
         String exp1Id = "001043_1783_0863";
         String exp1Seq = "CTGATCATTGGGCGTAAAGAGTGCGCAGGCGGTTTGTTAAGCGAGATGTGAAAGCCCCGGGCTCAACCTGGGAATTGCATTTCGAACTGGCGAACTAGAGTCTTGTAGAGGGGGTAGAATTCCAGGTGTAGCGGTGAAATGCGTAGAGATCTGGAGGAATACCGGTGGCGAAGGCGGCCCCCTGGACAAAGACTGACGCTCAGGCACGAAAGCGTGGGGAGCAAACAGGATTAAATACCCTCGTA";
-        
+
         String exp2Id = "001051_2436_2741";
         String exp2Seq = "CATCTCACTGGGCATAAAGGGCACGCAGACGGACCGACAGGTCGTTTGTGAAAGGCGAGGGCTCAACCCTTGTTTGCGGACGAAACCGTCGGACTGGAGTACCGGAGAGGGAAGTGGAATTCCCGGTGTAGCGGTGAAATGCGTAGATATCGGGAGGAACACCAGTGGCGAAGGCGGCTTCCTGGCCGGATACTGACGCTCAAGTGCGAAAGCTGGGGGAGCGAACGGGATTAGATACCCTTGTA";
-        
+
         SequenceReader seqFileReader = new SequenceReader(new File("test/test_init_v4.fastq"));
         Sequence seq1 = seqFileReader.readNextSequence();
-        
+
         assertTrue(seq1 instanceof QSequence);
-        
+
         assertEquals(exp1Id, seq1.getSeqName());
         assertEquals(exp1Seq, seq1.getSeqString());
-        
+
         seq1 = seqFileReader.readNextSequence();
-        
+
         assertEquals(exp2Id, seq1.getSeqName());
         assertEquals(exp2Seq, seq1.getSeqString());
     }
-    
-    @Test
-    public void testReadSTKFile() throws IOException {
-        String exp1Id = "GF040U105F9RVG";
-        String exp1Seq = "TRLILNSKAQTTVMDLARERGTVEDLELEDVSVEGHLGVRCAESGGPEPGVGCAGRGVITAINFLEENGAYTEdTDYVFYDVLGDVVCGGFAMPIRENKAKEIYIVT";
-        
-        String exp2Id = "GF040U105FRBRW";
-        String exp2Seq = "TRLILNSKAQTTVMDLARERGTVEDLELKDVLVEGHLGVRCAESGGPEPGVGCAGRGVITAINFLEENGAYTEdTDYVFYDVLGDVVCGGFAMPIRENKAKEIYIVT";
-        
-        SequenceReader seqFileReader = new SequenceReader(new File("test/test.sto"));
-        Sequence seq1 = seqFileReader.readNextSequence();
-                
-        assertEquals(exp1Id, seq1.getSeqName());
-        assertEquals(exp1Seq, seq1.getSeqString());
-        
-        seq1 = seqFileReader.readNextSequence();
-        
-        assertEquals(exp2Id, seq1.getSeqName());
-        assertEquals(exp2Seq, seq1.getSeqString());
-        
-        assertEquals("GF040U105FT65L", seqFileReader.readNextSequence().getSeqName());
-        assertEquals("#=GC PP_cons", seqFileReader.readNextSequence().getSeqName());
-        assertEquals("#=GC RF", seqFileReader.readNextSequence().getSeqName());
-    }
-    
-    @Test
-    public void testReadSFFFile() throws IOException {
-        String exp1Id = "GF040U105F9RVG";
-        String exp1Seq = "ACGAGTGCGTTGCGACCCGAAGGCCGACTCCACCCGCCTGATTCTGAACAGCAAAGCTCAAACCACGGTTATGGACCTGGCCCGTGAACGGGGAACGGTGGAGGATCTGGAACTGGAAGATGTGTCGGTGGAAGGTCATCTGGGGGTGCGCTGTGCGGAGTCCGGCGGCCCGGAACCGGGTGTGGGCTGTGCCGGACGGGGTGTGATCACCGCCATTTAACTTTCTTGAGGAAAACGGTGCTTACACCGAGGATACAGATTATGTCTTCTATGATGTTCTGGGTGATGTAGTCTGCGGGGGATTTGCCATGCCGATCCGTGAGAACAAAGCCAAGGAAATCTATATCGTCACCTCCGGCGAGATGATGGCC";
-        
-        String exp2Id = "GF040U105FRBRW";
-        String exp2Seq = "ACGAGTGCGTTGCGATCCGAAGGCTGACTCCACCCGCCTGATTCTGAACAGCAAAGCTCAAACCACGGTTATGGACCTGGCTCGTGAACGGGGAACGGTGGAGGATCTGGAACTGAAAGATGTGTTGGTGGAAGGTCATCTGGGGGTGCGCTGTGCGGAGTCCGGCGGCCCGGAACCGGGTGTGGGCTGTGCCGGACGGGGTGTGATCACCGCCATTAACTTTCTTGAGGAAAACGGTGCTTACACCGAGGATACAGATTATGTCTTCTATGATGTTCTGGGTGATGTAGTCTGCGGGGGATTTGCCATGCCGATCCGTGAGAACAAAGCCAAGGAAATCTATATCGTCACCTCCGGTGAAATGATGGCC";
-        
-        SequenceReader seqFileReader = new SequenceReader(new File("test/454Reads.sff"));
-        Sequence seq1 = seqFileReader.readNextSequence();
-                
-        assertEquals(exp1Id, seq1.getSeqName());
-        assertEquals(exp1Seq, seq1.getSeqString());
-        
-        seq1 = seqFileReader.readNextSequence();
-        
-        assertEquals(exp2Id, seq1.getSeqName());
-        assertEquals(exp2Seq, seq1.getSeqString());
-        
-    }
-    
-    @Test
-    public void testReadStream() throws IOException {
-        String seqs = ">test1\nacgt\n>test2\ngggg";
-        String exp1Id = "test1";
-        String exp1Seq = "acgt";
-        
-        String exp2Id = "test2";
-        String exp2Seq = "gggg";
-        
-        SequenceReader seqFileReader = new SequenceReader(new BufferedInputStream(new ByteArrayInputStream(seqs.getBytes())));
-        Sequence seq1 = seqFileReader.readNextSequence();
-                
-        assertEquals(exp1Id, seq1.getSeqName());
-        assertEquals(exp1Seq, seq1.getSeqString());
-        
-        seq1 = seqFileReader.readNextSequence();
-        
-        assertEquals(exp2Id, seq1.getSeqName());
-        assertEquals(exp2Seq, seq1.getSeqString());
-    }
-    
+
     @Test
     public void testReadEMBL() throws IOException {
         SequenceReader reader = new SequenceReader(new File("test/test.embl"));
         Sequence seq;
-        
+
         String expectedSeqid;
         String expectedSeq;
-        
+
         expectedSeqid = "FR838948";
         expectedSeq = "atgaaaataatcaatattggaattcttgcccatgtagacgctggaaagacgaccttgacggagagcctgctatatgccagcggagccatttcagaaccggggagcgtcgaaaaagggacaacgaggacggacaccatgtttttggagcggcagcgtgggattaccattcaagcggcagtcacttccttccagtggcacagatgtaaagttaacattgtggatacgcccggccacatggattttttggcggaggtgtaccgctctttggctgttttagatggggccatcttggtgatctccgctaaagatggcgtgcaggcccagacccgtattctgttccatgccctgcggaaaatgaacattcccaccgttatctttatcaacaagatcgaccaggctggcgttgatttgcagagcgtggttcagtctgttcgggataagctctccgccgatattatcatcaagcagacggtgtcgctgtccccggaaatagtcctggaggaaaataccgacatagaagcatgggatgcggtcatcgaaaataacgatgaattattggaaaagtatatcgcaggagaaccaatcagccgggaaaaacttgcgcgggaggaacagcagcgggttcaagacgcctccctgttcccggtctatcatggcagcgccaaaaatggccttggcattcaaccgttgatggatgcggtgacagggctgttccaaccgattggggaacaggggggcgccgccctatgcggcagcgttttcaaggttgagtacaccgattgcggccagcggcgtgtctatctacggttatacagcggaacgctgcgcctgcgggatacggtggccctggccgggagagaaaagctgaaaatcacagagatgcgtattccatccaaaggggaaattgttcggacagacaccgcttatcagggtgaaattgttatccttcccagcgacagcgtgaggttaaacgatgtattaggggaccaaacccggctccctcgtaaaaggtggcgcgaggaccccctccccatgctgcggacgacgattgcgccgaaaacggcagcgcaaagagaacggctgctggacgctcttacgcaacttgcggatactgacccgcttttgcgttgcgaagtggattccatcacccatgagatcattctttcttttttgggccgggtgcagttggaggttgtttccgctttgctgtcggaaaaatacaagcttgaaacagtggtaaaggaaccctccgtcatttatatggagcggccgctcaaagcagccagccacaccatccatatcgaggtgccgcccaacccgttttgggcatccataggactgtctgttacaccactctcgcttggctccggtgtacaatacgagagccgggtttcgctgggatacttgaaccagagttttcaaaacgctgtcagggatggtatccgttacgggctggagcagggcttgttcggctggaacgtaacggactgtaagatttgctttgaatacgggctttattacagtccggtcagcacgccggcggacttccgctcattggccccgattgtattggaacaggcattgaaggaatcggggacgcagctgctggaaccttatctctccttcatcctctatgcgccccaggaatacctttccagggcttatcatgatgcaccgaaatactgtgccaccatcgaaacggcccaggtaaaaaaggatgaagttgtctttactggcgagattcccgcccgctgtatacaggcataccgtactgatctggccttttacaccaacgggcggagcgtatgccttacagagctgaaaggatatcaggccgctgtcggtcagccggtcatccagccccgccgtccaaacagccgcctggacaaggtgcgccatatgtttcagaaggtaatgtaa";
 
         seq = reader.readNextSequence();
         assertNotNull(seq);
-        
+
         assertEquals(expectedSeqid, seq.getSeqName());
         assertEquals(expectedSeq, seq.getSeqString());
-        
+
         expectedSeqid = "FR838949";
         expectedSeq = "atgaaaataatcaatattggaattcttgcccatgtagacgctggaaagacgaccttgacggagagcctgctatatgccagcggagccatttcagaaccggggagcgtcgaaaaagggacaacgaggacggacaccatgtttttggagcggcagcgtgggattaccattcaagcggcagtcacttccttccagtggcacagatgtaaagttaacattgtggatacgcccggccacatggattttttggcggaggtgtaccgctctttggctgttttagatggggccatcttggtgatctccgctaaagatggcgtgcaggcccagacccgtattctgttccatgccctgcggaaaatgaacattcccaccgttatctttatcaacaagatcgaccaggctggcgttgatttgcagagcgtggttcagtctgttcgggataagctctccgccgatattatcatcaagcagacggtgtcgctgtccccggaaatagtcctggaggaaaataccgacatagaagcatgggatgcggtcatcgaaaataacgatgaattattggaaaagtatatcgcaggagaaccaatcagccgggaaaaacttgcgcgggaggaacagcggcgggttcaagacgcctccctgttcccggtctattatggcagcgccaaaaagggccttggcattcaaccgttgatggatgcggtgacagggctgttccaaccgattggggaacaggggagcgccgccctatgcggcagcgttttcaaggtggagtatacagattgcggccagcggcgtgtctatctacggctatacagcggaacgctgcgcctgcgggatacggtggccctggccgggagagaaaagctgaaaatcacagagatgcgtattccatccaaaggggaaattgttcggacagacaccgcttatccgggtgaaattgttatccttcccagcgacagcgtgaggttaaacgatgtattaggggacccaacccggctccctcgtaaaaggtggcgtgaggaccccctccccatgctgcggacgtcgattgcgccgaaaacggcagcgcaaagagaacggctgctggacgctcttacgcaacttgcggatactgacccgcttttgcgctgcgaggtggattccatcacccatgagatcattctttcttttttgggccgggtgcagttggaggttgtttccgctttgctgtcggaaaaatacaagcttgaaacagtggtaaaggaacccaccgtcatttatatggagcggccgctcaaagcagccagccacaccatccatatcgaggtgccgcccaacccgttttgggcatccatcggactgtctgttacaccactcccgcttggctccggtgtacaatacgagagccgggtttcgctgggatacttgaaccagagttttcaaaacgctgtcagggatggtatccgttacgggctggagcagggcttgttcggctggaacgtaacggactgtaagatttgctttgaatacgggctttattacagtccggtcagcacgccggcggacttccgctcattggccccgattgtattggaacaggcattgaaggaatcagggacgcaactgctggaaccttatctctccttcaccctctatgcgccccgggaatatctttccagggcttatcatgatgcaccgaaatactgtgccaccatcgaaacggtccaggtaaaaaaggatgaagttgtctttactggcgagattcccgcccgctgtatacaggcataccgtactgatctggccttttacaccaacgggcagagcgtatgccttacagaactgaaagggtatcaggccgctgtcggcaagccagtcatccagccccgccgtccaaacagccgcctggacaaggtgcgccatatgtttcagaaggtaatgtaa";
-        
+
         seq = reader.readNextSequence();
         assertNotNull(seq);
-        
+
         assertEquals(expectedSeqid, seq.getSeqName());
         assertEquals(expectedSeq, seq.getSeqString());
-        
+
         assertNull(reader.readNextSequence());
     }
-    
+
     @Test
     public void testReadGenbank() throws IOException {
         SequenceReader reader = new SequenceReader(new File("test/test.genbank"));
         Sequence seq;
-        
+
         String expectedSeqid;
         String expectedSeq;
 
@@ -179,71 +179,95 @@ public class SeqFileReaderTest {
 
         seq = reader.readNextSequence();
         assertNotNull(seq);
-        
+
         assertEquals(expectedSeqid, seq.getSeqName());
         assertEquals(expectedSeq, seq.getSeqString());
-        
+
         expectedSeqid = "S002189637";
         expectedSeq = "acacatgcagccaaaggaagtagcaatacgagtacttggcgtaagggtgagtaacgcataggtcatctgcccttaggttcgggataacttcgcgaaagcgaagataataccggatattgaggaaacttgaaagatttatcgcctaaggatgagcttatgtcccatcaggtagttggtagggtaaaagcctaccaagcctacgacgggtagctggtctgagaggatgatcagccacactggaactgagacacggtccagactcctacgggaggcagcagtgaggaatattgcgcaatgggtgaaagcctgacgcagcaacgccgcgtgtgcgacgaaggtcttcggattgtaaagcacttttgcaggggacgaacagcctattttatagacctgacggtaccttgcgaataagccacggctaactctgtgccagcagccgcggtgatacagaggtggcaagcgttgtccggatttactgggtataaagggtgcgtaggcggacctataagtcgagcgttaaagatcttcgcttaacgaagaaaatgcgctcgatactgttggtctagagtgttagagaggaaactggaatttccggtgtagcggtggaatgtgtagagatcggaaggaacaccagtggcgaaggcaggtttctggctaacaactgacgctgaggcacgaaagcgcgggtagcaaacaggattagataccctggtagtccgcgccctaaacgatggatgctagatgtcggacttcggttcggtgtcgcagctaacgcattaagcatcccacctgggaagtacgcgcgcaagcgtgaaactcaaaggaattgacgggggcccgcacaagcggtggagtatgtggtttaattcgatgcaacgcgaagaaccttacctaggcttgacatggtagctaaggcggatgaaagtccgcgtccgaaagggagctatcacaggtgctgcatggctgtcgtcagctcgtgtcgtgagatgttgggttaagtcccgcaacgagcgcaacccctattgttagttgctaccgggtaatgccgagcactctagcaagactgcctacgcaagtagagaggaaggaggggatgacgtcaagtcctcatggcccttacgcctagggcaacacacgtactacaatgggcattacaatgggcgaaggcgcgagccggagataatcccaaaaaagtgctctcagttcagatcggagtctgcaactcgactccgtgaagttggaatcgctagtaatcgcaggtcagcatactgcggtgaatacgttcccgggccttgtacacaccgcccgtcaagccatggaagttatcggcgcccgaagacgcattgcgt";
-        
+
         seq = reader.readNextSequence();
         assertNotNull(seq);
-        
+
         assertEquals(expectedSeqid, seq.getSeqName());
         assertEquals(expectedSeq, seq.getSeqString());
-        
-        assertNull(reader.readNextSequence());   
+
+        assertNull(reader.readNextSequence());
     }
-    
-    private static String readFully(BufferedReader reader) throws IOException {
-        String line;
-        StringBuilder ret = new StringBuilder();
-        
-        while((line = reader.readLine()) != null) {
-            ret.append(line).append("\n");
-        }
-        
-        return ret.toString();
-    }
-        
+
     @Test
-    public void testReadEMBLStream() throws IOException {
-        String contents = readFully(new BufferedReader(new FileReader("test/test.embl")));
-        
-        SequenceReader reader = new SequenceReader(new ByteArrayInputStream(contents.getBytes()));
+    public void testReadCompressedFastaFile() throws IOException {
+        SequenceReader reader = new SequenceReader(new File("test/test.fa.gz"));
+
+        Sequence s = reader.readNextSequence();
+
+        assertEquals("test0", s.getSeqName());
+        assertEquals("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", s.getSeqString());
+
+        s = reader.readNextSequence();
+        assertEquals("test1", s.getSeqName());
+        assertEquals("aAcCgGtTuUmMrRwWsSyYkKvVhHdDbBxXnN-.~", s.getSeqString());
+
+        reader.close();
+    }
+
+
+    @Test
+    public void testReadCompressedFastqFile() throws IOException {
+        String exp1Id = "001043_1783_0863";
+        String exp1Seq = "CTGATCATTGGGCGTAAAGAGTGCGCAGGCGGTTTGTTAAGCGAGATGTGAAAGCCCCGGGCTCAACCTGGGAATTGCATTTCGAACTGGCGAACTAGAGTCTTGTAGAGGGGGTAGAATTCCAGGTGTAGCGGTGAAATGCGTAGAGATCTGGAGGAATACCGGTGGCGAAGGCGGCCCCCTGGACAAAGACTGACGCTCAGGCACGAAAGCGTGGGGAGCAAACAGGATTAAATACCCTCGTA";
+
+        String exp2Id = "001051_2436_2741";
+        String exp2Seq = "CATCTCACTGGGCATAAAGGGCACGCAGACGGACCGACAGGTCGTTTGTGAAAGGCGAGGGCTCAACCCTTGTTTGCGGACGAAACCGTCGGACTGGAGTACCGGAGAGGGAAGTGGAATTCCCGGTGTAGCGGTGAAATGCGTAGATATCGGGAGGAACACCAGTGGCGAAGGCGGCTTCCTGGCCGGATACTGACGCTCAAGTGCGAAAGCTGGGGGAGCGAACGGGATTAGATACCCTTGTA";
+
+        SequenceReader seqFileReader = new SequenceReader(new File("test/test_init_v4.fastq.gz"));
+        Sequence seq1 = seqFileReader.readNextSequence();
+
+        assertTrue(seq1 instanceof QSequence);
+
+        assertEquals(exp1Id, seq1.getSeqName());
+        assertEquals(exp1Seq, seq1.getSeqString());
+
+        seq1 = seqFileReader.readNextSequence();
+
+        assertEquals(exp2Id, seq1.getSeqName());
+        assertEquals(exp2Seq, seq1.getSeqString());
+    }
+
+    @Test
+    public void testReadCompressedEMBL() throws IOException {
+        SequenceReader reader = new SequenceReader(new File("test/test.embl.gz"));
         Sequence seq;
-        
+
         String expectedSeqid;
         String expectedSeq;
-        
+
         expectedSeqid = "FR838948";
         expectedSeq = "atgaaaataatcaatattggaattcttgcccatgtagacgctggaaagacgaccttgacggagagcctgctatatgccagcggagccatttcagaaccggggagcgtcgaaaaagggacaacgaggacggacaccatgtttttggagcggcagcgtgggattaccattcaagcggcagtcacttccttccagtggcacagatgtaaagttaacattgtggatacgcccggccacatggattttttggcggaggtgtaccgctctttggctgttttagatggggccatcttggtgatctccgctaaagatggcgtgcaggcccagacccgtattctgttccatgccctgcggaaaatgaacattcccaccgttatctttatcaacaagatcgaccaggctggcgttgatttgcagagcgtggttcagtctgttcgggataagctctccgccgatattatcatcaagcagacggtgtcgctgtccccggaaatagtcctggaggaaaataccgacatagaagcatgggatgcggtcatcgaaaataacgatgaattattggaaaagtatatcgcaggagaaccaatcagccgggaaaaacttgcgcgggaggaacagcagcgggttcaagacgcctccctgttcccggtctatcatggcagcgccaaaaatggccttggcattcaaccgttgatggatgcggtgacagggctgttccaaccgattggggaacaggggggcgccgccctatgcggcagcgttttcaaggttgagtacaccgattgcggccagcggcgtgtctatctacggttatacagcggaacgctgcgcctgcgggatacggtggccctggccgggagagaaaagctgaaaatcacagagatgcgtattccatccaaaggggaaattgttcggacagacaccgcttatcagggtgaaattgttatccttcccagcgacagcgtgaggttaaacgatgtattaggggaccaaacccggctccctcgtaaaaggtggcgcgaggaccccctccccatgctgcggacgacgattgcgccgaaaacggcagcgcaaagagaacggctgctggacgctcttacgcaacttgcggatactgacccgcttttgcgttgcgaagtggattccatcacccatgagatcattctttcttttttgggccgggtgcagttggaggttgtttccgctttgctgtcggaaaaatacaagcttgaaacagtggtaaaggaaccctccgtcatttatatggagcggccgctcaaagcagccagccacaccatccatatcgaggtgccgcccaacccgttttgggcatccataggactgtctgttacaccactctcgcttggctccggtgtacaatacgagagccgggtttcgctgggatacttgaaccagagttttcaaaacgctgtcagggatggtatccgttacgggctggagcagggcttgttcggctggaacgtaacggactgtaagatttgctttgaatacgggctttattacagtccggtcagcacgccggcggacttccgctcattggccccgattgtattggaacaggcattgaaggaatcggggacgcagctgctggaaccttatctctccttcatcctctatgcgccccaggaatacctttccagggcttatcatgatgcaccgaaatactgtgccaccatcgaaacggcccaggtaaaaaaggatgaagttgtctttactggcgagattcccgcccgctgtatacaggcataccgtactgatctggccttttacaccaacgggcggagcgtatgccttacagagctgaaaggatatcaggccgctgtcggtcagccggtcatccagccccgccgtccaaacagccgcctggacaaggtgcgccatatgtttcagaaggtaatgtaa";
 
         seq = reader.readNextSequence();
         assertNotNull(seq);
-        
+
         assertEquals(expectedSeqid, seq.getSeqName());
         assertEquals(expectedSeq, seq.getSeqString());
-        
+
         expectedSeqid = "FR838949";
         expectedSeq = "atgaaaataatcaatattggaattcttgcccatgtagacgctggaaagacgaccttgacggagagcctgctatatgccagcggagccatttcagaaccggggagcgtcgaaaaagggacaacgaggacggacaccatgtttttggagcggcagcgtgggattaccattcaagcggcagtcacttccttccagtggcacagatgtaaagttaacattgtggatacgcccggccacatggattttttggcggaggtgtaccgctctttggctgttttagatggggccatcttggtgatctccgctaaagatggcgtgcaggcccagacccgtattctgttccatgccctgcggaaaatgaacattcccaccgttatctttatcaacaagatcgaccaggctggcgttgatttgcagagcgtggttcagtctgttcgggataagctctccgccgatattatcatcaagcagacggtgtcgctgtccccggaaatagtcctggaggaaaataccgacatagaagcatgggatgcggtcatcgaaaataacgatgaattattggaaaagtatatcgcaggagaaccaatcagccgggaaaaacttgcgcgggaggaacagcggcgggttcaagacgcctccctgttcccggtctattatggcagcgccaaaaagggccttggcattcaaccgttgatggatgcggtgacagggctgttccaaccgattggggaacaggggagcgccgccctatgcggcagcgttttcaaggtggagtatacagattgcggccagcggcgtgtctatctacggctatacagcggaacgctgcgcctgcgggatacggtggccctggccgggagagaaaagctgaaaatcacagagatgcgtattccatccaaaggggaaattgttcggacagacaccgcttatccgggtgaaattgttatccttcccagcgacagcgtgaggttaaacgatgtattaggggacccaacccggctccctcgtaaaaggtggcgtgaggaccccctccccatgctgcggacgtcgattgcgccgaaaacggcagcgcaaagagaacggctgctggacgctcttacgcaacttgcggatactgacccgcttttgcgctgcgaggtggattccatcacccatgagatcattctttcttttttgggccgggtgcagttggaggttgtttccgctttgctgtcggaaaaatacaagcttgaaacagtggtaaaggaacccaccgtcatttatatggagcggccgctcaaagcagccagccacaccatccatatcgaggtgccgcccaacccgttttgggcatccatcggactgtctgttacaccactcccgcttggctccggtgtacaatacgagagccgggtttcgctgggatacttgaaccagagttttcaaaacgctgtcagggatggtatccgttacgggctggagcagggcttgttcggctggaacgtaacggactgtaagatttgctttgaatacgggctttattacagtccggtcagcacgccggcggacttccgctcattggccccgattgtattggaacaggcattgaaggaatcagggacgcaactgctggaaccttatctctccttcaccctctatgcgccccgggaatatctttccagggcttatcatgatgcaccgaaatactgtgccaccatcgaaacggtccaggtaaaaaaggatgaagttgtctttactggcgagattcccgcccgctgtatacaggcataccgtactgatctggccttttacaccaacgggcagagcgtatgccttacagaactgaaagggtatcaggccgctgtcggcaagccagtcatccagccccgccgtccaaacagccgcctggacaaggtgcgccatatgtttcagaaggtaatgtaa";
-        
+
         seq = reader.readNextSequence();
         assertNotNull(seq);
-        
+
         assertEquals(expectedSeqid, seq.getSeqName());
         assertEquals(expectedSeq, seq.getSeqString());
-        
+
         assertNull(reader.readNextSequence());
     }
-    
+
     @Test
-    public void testReadGenbankStream() throws IOException {
-        String contents = readFully(new BufferedReader(new FileReader("test/test.genbank")));
-        
-        SequenceReader reader = new SequenceReader(new ByteArrayInputStream(contents.getBytes()));
+    public void testReadCompressedGenbank() throws IOException {
+        SequenceReader reader = new SequenceReader(new File("test/test.genbank.gz"));
         Sequence seq;
-        
+
         String expectedSeqid;
         String expectedSeq;
 
@@ -252,19 +276,92 @@ public class SeqFileReaderTest {
 
         seq = reader.readNextSequence();
         assertNotNull(seq);
-        
+
         assertEquals(expectedSeqid, seq.getSeqName());
         assertEquals(expectedSeq, seq.getSeqString());
-        
+
         expectedSeqid = "S002189637";
         expectedSeq = "acacatgcagccaaaggaagtagcaatacgagtacttggcgtaagggtgagtaacgcataggtcatctgcccttaggttcgggataacttcgcgaaagcgaagataataccggatattgaggaaacttgaaagatttatcgcctaaggatgagcttatgtcccatcaggtagttggtagggtaaaagcctaccaagcctacgacgggtagctggtctgagaggatgatcagccacactggaactgagacacggtccagactcctacgggaggcagcagtgaggaatattgcgcaatgggtgaaagcctgacgcagcaacgccgcgtgtgcgacgaaggtcttcggattgtaaagcacttttgcaggggacgaacagcctattttatagacctgacggtaccttgcgaataagccacggctaactctgtgccagcagccgcggtgatacagaggtggcaagcgttgtccggatttactgggtataaagggtgcgtaggcggacctataagtcgagcgttaaagatcttcgcttaacgaagaaaatgcgctcgatactgttggtctagagtgttagagaggaaactggaatttccggtgtagcggtggaatgtgtagagatcggaaggaacaccagtggcgaaggcaggtttctggctaacaactgacgctgaggcacgaaagcgcgggtagcaaacaggattagataccctggtagtccgcgccctaaacgatggatgctagatgtcggacttcggttcggtgtcgcagctaacgcattaagcatcccacctgggaagtacgcgcgcaagcgtgaaactcaaaggaattgacgggggcccgcacaagcggtggagtatgtggtttaattcgatgcaacgcgaagaaccttacctaggcttgacatggtagctaaggcggatgaaagtccgcgtccgaaagggagctatcacaggtgctgcatggctgtcgtcagctcgtgtcgtgagatgttgggttaagtcccgcaacgagcgcaacccctattgttagttgctaccgggtaatgccgagcactctagcaagactgcctacgcaagtagagaggaaggaggggatgacgtcaagtcctcatggcccttacgcctagggcaacacacgtactacaatgggcattacaatgggcgaaggcgcgagccggagataatcccaaaaaagtgctctcagttcagatcggagtctgcaactcgactccgtgaagttggaatcgctagtaatcgcaggtcagcatactgcggtgaatacgttcccgggccttgtacacaccgcccgtcaagccatggaagttatcggcgcccgaagacgcattgcgt";
-        
+
         seq = reader.readNextSequence();
         assertNotNull(seq);
-        
+
         assertEquals(expectedSeqid, seq.getSeqName());
         assertEquals(expectedSeq, seq.getSeqString());
-        
-        assertNull(reader.readNextSequence());   
+
+        assertNull(reader.readNextSequence());
+    }
+
+    private static String readFully(BufferedReader reader) throws IOException {
+        String line;
+        StringBuilder ret = new StringBuilder();
+
+        while((line = reader.readLine()) != null) {
+            ret.append(line).append("\n");
+        }
+
+        return ret.toString();
+    }
+
+    @Test
+    public void testReadEMBLStream() throws IOException {
+        String contents = readFully(new BufferedReader(new FileReader("test/test.embl")));
+
+        SequenceReader reader = new SequenceReader(new ByteArrayInputStream(contents.getBytes()));
+        Sequence seq;
+
+        String expectedSeqid;
+        String expectedSeq;
+
+        expectedSeqid = "FR838948";
+        expectedSeq = "atgaaaataatcaatattggaattcttgcccatgtagacgctggaaagacgaccttgacggagagcctgctatatgccagcggagccatttcagaaccggggagcgtcgaaaaagggacaacgaggacggacaccatgtttttggagcggcagcgtgggattaccattcaagcggcagtcacttccttccagtggcacagatgtaaagttaacattgtggatacgcccggccacatggattttttggcggaggtgtaccgctctttggctgttttagatggggccatcttggtgatctccgctaaagatggcgtgcaggcccagacccgtattctgttccatgccctgcggaaaatgaacattcccaccgttatctttatcaacaagatcgaccaggctggcgttgatttgcagagcgtggttcagtctgttcgggataagctctccgccgatattatcatcaagcagacggtgtcgctgtccccggaaatagtcctggaggaaaataccgacatagaagcatgggatgcggtcatcgaaaataacgatgaattattggaaaagtatatcgcaggagaaccaatcagccgggaaaaacttgcgcgggaggaacagcagcgggttcaagacgcctccctgttcccggtctatcatggcagcgccaaaaatggccttggcattcaaccgttgatggatgcggtgacagggctgttccaaccgattggggaacaggggggcgccgccctatgcggcagcgttttcaaggttgagtacaccgattgcggccagcggcgtgtctatctacggttatacagcggaacgctgcgcctgcgggatacggtggccctggccgggagagaaaagctgaaaatcacagagatgcgtattccatccaaaggggaaattgttcggacagacaccgcttatcagggtgaaattgttatccttcccagcgacagcgtgaggttaaacgatgtattaggggaccaaacccggctccctcgtaaaaggtggcgcgaggaccccctccccatgctgcggacgacgattgcgccgaaaacggcagcgcaaagagaacggctgctggacgctcttacgcaacttgcggatactgacccgcttttgcgttgcgaagtggattccatcacccatgagatcattctttcttttttgggccgggtgcagttggaggttgtttccgctttgctgtcggaaaaatacaagcttgaaacagtggtaaaggaaccctccgtcatttatatggagcggccgctcaaagcagccagccacaccatccatatcgaggtgccgcccaacccgttttgggcatccataggactgtctgttacaccactctcgcttggctccggtgtacaatacgagagccgggtttcgctgggatacttgaaccagagttttcaaaacgctgtcagggatggtatccgttacgggctggagcagggcttgttcggctggaacgtaacggactgtaagatttgctttgaatacgggctttattacagtccggtcagcacgccggcggacttccgctcattggccccgattgtattggaacaggcattgaaggaatcggggacgcagctgctggaaccttatctctccttcatcctctatgcgccccaggaatacctttccagggcttatcatgatgcaccgaaatactgtgccaccatcgaaacggcccaggtaaaaaaggatgaagttgtctttactggcgagattcccgcccgctgtatacaggcataccgtactgatctggccttttacaccaacgggcggagcgtatgccttacagagctgaaaggatatcaggccgctgtcggtcagccggtcatccagccccgccgtccaaacagccgcctggacaaggtgcgccatatgtttcagaaggtaatgtaa";
+
+        seq = reader.readNextSequence();
+        assertNotNull(seq);
+
+        assertEquals(expectedSeqid, seq.getSeqName());
+        assertEquals(expectedSeq, seq.getSeqString());
+
+        expectedSeqid = "FR838949";
+        expectedSeq = "atgaaaataatcaatattggaattcttgcccatgtagacgctggaaagacgaccttgacggagagcctgctatatgccagcggagccatttcagaaccggggagcgtcgaaaaagggacaacgaggacggacaccatgtttttggagcggcagcgtgggattaccattcaagcggcagtcacttccttccagtggcacagatgtaaagttaacattgtggatacgcccggccacatggattttttggcggaggtgtaccgctctttggctgttttagatggggccatcttggtgatctccgctaaagatggcgtgcaggcccagacccgtattctgttccatgccctgcggaaaatgaacattcccaccgttatctttatcaacaagatcgaccaggctggcgttgatttgcagagcgtggttcagtctgttcgggataagctctccgccgatattatcatcaagcagacggtgtcgctgtccccggaaatagtcctggaggaaaataccgacatagaagcatgggatgcggtcatcgaaaataacgatgaattattggaaaagtatatcgcaggagaaccaatcagccgggaaaaacttgcgcgggaggaacagcggcgggttcaagacgcctccctgttcccggtctattatggcagcgccaaaaagggccttggcattcaaccgttgatggatgcggtgacagggctgttccaaccgattggggaacaggggagcgccgccctatgcggcagcgttttcaaggtggagtatacagattgcggccagcggcgtgtctatctacggctatacagcggaacgctgcgcctgcgggatacggtggccctggccgggagagaaaagctgaaaatcacagagatgcgtattccatccaaaggggaaattgttcggacagacaccgcttatccgggtgaaattgttatccttcccagcgacagcgtgaggttaaacgatgtattaggggacccaacccggctccctcgtaaaaggtggcgtgaggaccccctccccatgctgcggacgtcgattgcgccgaaaacggcagcgcaaagagaacggctgctggacgctcttacgcaacttgcggatactgacccgcttttgcgctgcgaggtggattccatcacccatgagatcattctttcttttttgggccgggtgcagttggaggttgtttccgctttgctgtcggaaaaatacaagcttgaaacagtggtaaaggaacccaccgtcatttatatggagcggccgctcaaagcagccagccacaccatccatatcgaggtgccgcccaacccgttttgggcatccatcggactgtctgttacaccactcccgcttggctccggtgtacaatacgagagccgggtttcgctgggatacttgaaccagagttttcaaaacgctgtcagggatggtatccgttacgggctggagcagggcttgttcggctggaacgtaacggactgtaagatttgctttgaatacgggctttattacagtccggtcagcacgccggcggacttccgctcattggccccgattgtattggaacaggcattgaaggaatcagggacgcaactgctggaaccttatctctccttcaccctctatgcgccccgggaatatctttccagggcttatcatgatgcaccgaaatactgtgccaccatcgaaacggtccaggtaaaaaaggatgaagttgtctttactggcgagattcccgcccgctgtatacaggcataccgtactgatctggccttttacaccaacgggcagagcgtatgccttacagaactgaaagggtatcaggccgctgtcggcaagccagtcatccagccccgccgtccaaacagccgcctggacaaggtgcgccatatgtttcagaaggtaatgtaa";
+
+        seq = reader.readNextSequence();
+        assertNotNull(seq);
+
+        assertEquals(expectedSeqid, seq.getSeqName());
+        assertEquals(expectedSeq, seq.getSeqString());
+
+        assertNull(reader.readNextSequence());
+    }
+
+    @Test
+    public void testReadGenbankStream() throws IOException {
+        String contents = readFully(new BufferedReader(new FileReader("test/test.genbank")));
+
+        SequenceReader reader = new SequenceReader(new ByteArrayInputStream(contents.getBytes()));
+        Sequence seq;
+
+        String expectedSeqid;
+        String expectedSeq;
+
+        expectedSeqid = "S000349357";
+        expectedSeq = "gagtttgatcctggctcaggacgaacgctggcggcgtgcctaacacatgcaagccaaaggaaagtagcaatatgagtacttggcgcaagggtgcgtaatgtataggttatctacccttcggttcgggataacttcgcgaaagcgaagataataccggatattgaggagacttgaaagatttatcgccgaaggatgagcttatatcccatcaggtagttggtagggtaaaagcctaccaagcctacgacgggtagctggtctgagaggatgatcagccacactggaactgagacacggtccagactcctacgggaggcagcagtgaggaatattgctcaatgggtgaaagcctgaagcagcaacgccgcgtgaacgatgaaggtcttcggattgtaaagttcttttgcaggggacgaaaaactcgctttgcgagtctgacggtactctgcgaataagccacggctaactctgtgccagcagccgcggtgatacagaggtggcaagcgttgtccggatttactgggtgtaaagggtgcgtaggcggatttgcaagtcgggggttaaagactcttgcttaacaagagaaacgccttcgatactgcatgtctagagtgccgaagaggaaactggaatttccggtgtagcggtggaatgtgcagagatcggaaggaacaccagtggcgaaggcaggtttgtggtcggtaactgacgctgatgcacgaaagcgtggggagcaaacaggattagataccctggtagtccacgccctaaacgatggatgctagatgttggacttcggttcagtgtcgtagctaacgcagtaagcatcccacctggggagtacgcgcgcaagcgtgaaactcaaaggaattgacgggggcccgcacaagcggtggagtatgtggtttaattcgatgcaacgcgaagaaccttacctaggcttgacatgctgggtaaagcggatgaaagtccgtgtccgaaagggatccagcacaggtgctgcatggctgtcgtcagctcgtgtcgtgagatgttgggttaagtcccgcaacgagcgcaacccctattgttagttgctaccaagtaatgttgagcactctagcaagactgcctacgcaagtagagaggaaggaggggatgacgtcaagtcctcatggcccttacgcctagggccacacacgtactacaatgggtactacaatgggcgaagtcgcgagacggaggtaatcccaaaaaagcactctcagttcagatcggagtctgcaactcgactccgtgaagttggaatcgctagtaatcgcggatcagcatgccgcggtgaatacgttcccgggccttgtacacaccgcccgtcaagccatggaagtcatcagcgcccgaagacgctttgcgtttaaggcgagggtggtaactggggctaagtcgtaacaaggtaac";
+
+        seq = reader.readNextSequence();
+        assertNotNull(seq);
+
+        assertEquals(expectedSeqid, seq.getSeqName());
+        assertEquals(expectedSeq, seq.getSeqString());
+
+        expectedSeqid = "S002189637";
+        expectedSeq = "acacatgcagccaaaggaagtagcaatacgagtacttggcgtaagggtgagtaacgcataggtcatctgcccttaggttcgggataacttcgcgaaagcgaagataataccggatattgaggaaacttgaaagatttatcgcctaaggatgagcttatgtcccatcaggtagttggtagggtaaaagcctaccaagcctacgacgggtagctggtctgagaggatgatcagccacactggaactgagacacggtccagactcctacgggaggcagcagtgaggaatattgcgcaatgggtgaaagcctgacgcagcaacgccgcgtgtgcgacgaaggtcttcggattgtaaagcacttttgcaggggacgaacagcctattttatagacctgacggtaccttgcgaataagccacggctaactctgtgccagcagccgcggtgatacagaggtggcaagcgttgtccggatttactgggtataaagggtgcgtaggcggacctataagtcgagcgttaaagatcttcgcttaacgaagaaaatgcgctcgatactgttggtctagagtgttagagaggaaactggaatttccggtgtagcggtggaatgtgtagagatcggaaggaacaccagtggcgaaggcaggtttctggctaacaactgacgctgaggcacgaaagcgcgggtagcaaacaggattagataccctggtagtccgcgccctaaacgatggatgctagatgtcggacttcggttcggtgtcgcagctaacgcattaagcatcccacctgggaagtacgcgcgcaagcgtgaaactcaaaggaattgacgggggcccgcacaagcggtggagtatgtggtttaattcgatgcaacgcgaagaaccttacctaggcttgacatggtagctaaggcggatgaaagtccgcgtccgaaagggagctatcacaggtgctgcatggctgtcgtcagctcgtgtcgtgagatgttgggttaagtcccgcaacgagcgcaacccctattgttagttgctaccgggtaatgccgagcactctagcaagactgcctacgcaagtagagaggaaggaggggatgacgtcaagtcctcatggcccttacgcctagggcaacacacgtactacaatgggcattacaatgggcgaaggcgcgagccggagataatcccaaaaaagtgctctcagttcagatcggagtctgcaactcgactccgtgaagttggaatcgctagtaatcgcaggtcagcatactgcggtgaatacgttcccgggccttgtacacaccgcccgtcaagccatggaagttatcggcgcccgaagacgcattgcgt";
+
+        seq = reader.readNextSequence();
+        assertNotNull(seq);
+
+        assertEquals(expectedSeqid, seq.getSeqName());
+        assertEquals(expectedSeq, seq.getSeqString());
+
+        assertNull(reader.readNextSequence());
     }
 }

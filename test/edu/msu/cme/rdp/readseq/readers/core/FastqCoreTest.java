@@ -17,6 +17,7 @@
 package edu.msu.cme.rdp.readseq.readers.core;
 
 import edu.msu.cme.rdp.readseq.QSequence;
+import edu.msu.cme.rdp.readseq.readers.IndexedSeqReader;
 import java.io.File;
 import java.io.IOException;
 import org.junit.Test;
@@ -49,5 +50,38 @@ public class FastqCoreTest {
         for (int index = 0; index < expectedQual.length; index++) {
             assertEquals("Qual[" + index + "]", expectedQual[index], seq.getQuality()[index]);
         }
+        // check the second sequence
+        seq = (QSequence) core.readNextSeq();
+        assertEquals(seq.getSeqName(), "001051_2436_2741");
+        assertEquals(seq.getQuality()[0], 31);  // the first quality score is @
+        assertEquals(seq.getQuality()[1], 27);  // the first quality score is <
+        
+        // check the third sequence
+        seq = (QSequence) core.readNextSeq();
+        assertEquals(seq.getSeqName(), "001053_1979_3818");
+        assertEquals(seq.getSeqString(), "CTGATCACTGGGCGTAAAGGGTGCGCAGGCGGTTTGTTAAGCGAGATGTGAAAGCCCCGGGCTCAACCTGGGAATTGCATTTCGAACTGGCAAACTAGAGTCTTGTAGAGGGGGTAGAATTCCAGGTGTAGCGGTGAAATGCGTAGAGATCTGGAGGAATACCGGTGGCGAAGGCGGCCCCCTGGACAAAGACTGACGCTCAGGCACGAAAGCGTGGGGAGCAAACAGGATTAGATACCCGAGTA");
+        assertEquals(seq.getQuality()[0], 26);  // the first quality score is ;
+        assertEquals(seq.getQuality()[1], 27);  // the first quality score is <
+         
+        seq = (QSequence) core.readNextSeq();
+        assertEquals(seq.getSeqName(), "001058_1806_1734");
+        assertEquals(seq.getSeqString(), "CATCTCATTGGGCATAAAGAGTGCGCAGGCGGTTGTGTGTGTCAGGTGTGAAGTCTCGGGGCTTAACTCCGAAACTGCGCCTGAAACTACACAACTAGAGTATTGGAGAGGGTAGCAGAATTCATGGTGTAGCAGTGAAATGCGTAGATATCATGAGGAATACCAGAGGCGAAGGCGGCTACCTGGACAATTACTGACGCTCAGGCACGAAAGCGTGGGGAGCAAAAGGGATTAGATACCCCGGTA");
+        assertEquals(seq.getQuality()[0], 27);  // the first quality score is <
+        assertEquals(seq.getQuality()[1], 27);  // the first quality score is <
+        
+         IndexedSeqReader reader = new IndexedSeqReader(seqFile);
+         seq = (QSequence)reader.readSeq("001053_1979_3818");
+         
+         assertEquals(seq.getSeqString(), "CTGATCACTGGGCGTAAAGGGTGCGCAGGCGGTTTGTTAAGCGAGATGTGAAAGCCCCGGGCTCAACCTGGGAATTGCATTTCGAACTGGCAAACTAGAGTCTTGTAGAGGGGGTAGAATTCCAGGTGTAGCGGTGAAATGCGTAGAGATCTGGAGGAATACCGGTGGCGAAGGCGGCCCCCTGGACAAAGACTGACGCTCAGGCACGAAAGCGTGGGGAGCAAACAGGATTAGATACCCGAGTA");
+         assertEquals(seq.getQuality()[0], 26);  // the first quality score is ;
+         assertEquals(seq.getQuality()[1], 27);  // the first quality score is <
+         
+         seq = (QSequence)reader.readSeq("001117_1940_3761");
+         assertEquals(seq.getSeqString(), "AGAGAGATTGGGTGTAAAGAGCGCGTAGGCGGTCCTGTAAGCCCGGCGTGAAAACCTGGAGCTCAACTCCGGGCCTGCGCTGGGAACTGCGGGACTAGAGTCATGGAAGGGAAGTTGGAATTCCAGGTGTAGGGGTGAAATCTGTAGATATCTGGAAGAACACCGGTGGCGAAGGCGAACTTCTGGCCAATGACTGACGCTGAGGCGCGAAAGTGCGGGAGCAAACAGGATTAGATACCCGTGTA");
+         assertEquals(seq.getQuality()[0], 20);  // the first quality score is 5
+         assertEquals(seq.getQuality()[1], 24);  // the first quality score is 9
+         
+         
+         
     }
 }

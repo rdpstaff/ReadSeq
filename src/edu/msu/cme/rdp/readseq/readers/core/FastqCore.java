@@ -76,9 +76,13 @@ public class FastqCore extends SeqReaderCore {
 
         while (seqFile.getFilePointer() != seqFile.length()) {
             String sid = parseSid();
-            seqIndex.put(sid, lastHeader);
-
-            readUntilNext("\n@");
+            seqIndex.put(sid, lastHeader);    
+            String temp = readUntilNext("\n@");
+            // when @ is the first char of the quality line    
+            String[] lines = temp.split("\n");            
+            if ( lines.length == 2){
+                readUntilNext("\n@");
+            }
 
             lastHeader = seqFile.getFilePointer();
         }

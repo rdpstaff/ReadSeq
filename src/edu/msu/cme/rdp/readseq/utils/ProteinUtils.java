@@ -55,10 +55,6 @@ public class ProteinUtils {
             return aminoAcid;
         }
 
-        public Character getAminoAcid(int index) {
-            return aminoAcid;
-        }
-
         public boolean isInitiator() {
             return initiator;
         }
@@ -202,11 +198,14 @@ public class ProteinUtils {
             char protBase = protSeq.charAt(index);
 	    int nucSeqIndex = unalignedIndex * 3;
 
-	    if (nucSeqIndex + 3 > unalignedNucSeq.length() + 1) {
-		break;
-	    }
+            if (protBase == 'x' || protBase == 'X') {   // if the aa is "X", do not check if the nucleotide bases match the aa base
+                nucSeq.append(Character.toLowerCase(bases[nucSeqIndex])).append(Character.toLowerCase(bases[nucSeqIndex + 1])).append(Character.toLowerCase(bases[nucSeqIndex + 2]));
+                unalignedIndex ++;
+            }else if (Character.isLetter(protBase)) {
 
-            if (Character.isLetter(protBase)) {
+                if (nucSeqIndex + 3 > unalignedNucSeq.length() + 1) {
+                    throw new IllegalStateException("Ran out of nucleotides but there were still proteins...");
+                }
                 char p = protBase;
 
                 AminoAcid aa = null;

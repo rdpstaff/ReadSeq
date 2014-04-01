@@ -21,6 +21,7 @@ import edu.msu.cme.rdp.readseq.SequenceFormat;
 import edu.msu.cme.rdp.readseq.writers.FastaWriter;
 import edu.msu.cme.rdp.readseq.readers.Sequence;
 import edu.msu.cme.rdp.readseq.readers.IndexedSeqReader;
+import edu.msu.cme.rdp.readseq.readers.SeqReader;
 import edu.msu.cme.rdp.readseq.readers.SequenceReader;
 import edu.msu.cme.rdp.readseq.readers.core.FastqCore;
 import edu.msu.cme.rdp.readseq.utils.BarcodeUtils.BarcodeInvalidException;
@@ -28,8 +29,12 @@ import edu.msu.cme.rdp.readseq.writers.FastqWriter;
 import edu.msu.cme.rdp.readseq.writers.SequenceWriter;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -43,16 +48,16 @@ public class BarcodeSorter {
         return new File(workDir, tag + suffix);
     }
 
-    public static void sort(File seqFile, File tagFile) throws IOException, BarcodeInvalidException {
-        sortWithQual(seqFile, null, tagFile, new File("."));
+    public static Map<String, List<File>> sort(File seqFile, File tagFile) throws IOException, BarcodeInvalidException {
+        return sortWithQual(seqFile, null, tagFile, new File("."));
     }
 
-    public static void sort(File seqFile, File tagFile, File workDir) throws IOException, BarcodeInvalidException {
-        sortWithQual(seqFile, null, tagFile, workDir);
+    public static Map<String, List<File>> sort(File seqFile, File tagFile, File workDir) throws IOException, BarcodeInvalidException {
+        return sortWithQual(seqFile, null, tagFile, workDir);
     }
 
-    public static void sortWithQual(File seqFile, File qualFile, File tagFile) throws IOException, BarcodeInvalidException {
-        sortWithQual(seqFile, qualFile, tagFile, new File("."));
+    public static Map<String, List<File>> sortWithQual(File seqFile, File qualFile, File tagFile) throws IOException, BarcodeInvalidException {
+        return sortWithQual(seqFile, qualFile, tagFile, new File("."));
     }
 
     /**
@@ -70,7 +75,7 @@ public class BarcodeSorter {
      * @throws
      * edu.msu.cme.rdp.readseq.utils.BarcodeUtils.BarcodeInvalidException
      */
-    public static void sortWithQual(File seqFile, File qualFile, File tagFile, File workDir) throws IOException, BarcodeInvalidException {
+    public static Map<String, List<File>> sortWithQual(File seqFile, File qualFile, File tagFile, File workDir) throws IOException, BarcodeInvalidException {
         SequenceFormat format = SeqUtils.guessFileFormat(seqFile);
 
         if (format != SequenceFormat.FASTA && qualFile != null && qualFile.exists()) {
@@ -78,6 +83,7 @@ public class BarcodeSorter {
         }
 
         boolean hasQuality = (qualFile != null && qualFile.exists()) || format == SequenceFormat.FASTQ || format == SequenceFormat.SFF;
+        Map<String, List<File>> ret = new HashMap();
 
         SequenceReader seqReader = new SequenceReader(seqFile);
         IndexedSeqReader qualReader = null;
@@ -91,18 +97,25 @@ public class BarcodeSorter {
 
         Map<String, String> barcodeMap = BarcodeUtils.readBarcodeFile(tagFile);
         barcodeMap.put(NoTag, NoTag);
+        String tagName;
 
         for (String barcode : barcodeMap.keySet()) {
             File fileName = null;
             SequenceWriter stream = null;
+            tagName = barcodeMap.get(barcode);
             if (hasQuality) {
-                fileName = getFastaFile(workDir, barcodeMap.get(barcode), ".fastq");
+                fileName = getFastaFile(workDir, tagName, ".fastq");
             } else {
-                fileName = getFastaFile(workDir, barcodeMap.get(barcode), ".fasta");
+                fileName = getFastaFile(workDir, tagName, ".fasta");
             }
 
             stream = fileNameToStream.get(fileName);
             if (stream == null) {
+                if (!ret.keySet().contains(tagName)) {
+                    ret.put(tagName, new ArrayList());
+                }
+                ret.get(tagName).add(fileName);
+
                 if (hasQuality) {
                     stream = new FastqWriter(fileName, FastqCore.Phred33QualFunction);
                 } else {
@@ -169,6 +182,122 @@ public class BarcodeSorter {
                 parent.delete();
             }
         }
+
+        return ret;
+    }
+
+    /**
+     * Sorts the sequence file (and optional qual file) by barcodes
+     *
+     * This method will NOT complain if a sequence in the fasta file doesn't
+     * have a qual file entry
+     *
+     * @param seqFile
+     * @param qualFile
+     * @param tagFile
+     * @param workDir
+     * @param makeDirForBarcode
+     * @throws IOException
+     * @throws
+     * edu.msu.cme.rdp.readseq.utils.BarcodeUtils.BarcodeInvalidException
+     */
+    public static Map<String, List<File>> sort(List<File> seqFiles, File tagFile, File workDir, byte defaultQual) throws IOException, BarcodeInvalidException {
+        SequenceFormat format;
+        boolean hasQuality = false;
+
+        for (File f : seqFiles) {
+            format = SeqUtils.guessFileFormat(f);
+            if (format == SequenceFormat.FASTQ || format == SequenceFormat.SFF) {
+                hasQuality = true;
+                break;
+            }
+        }
+
+        Map<String, List<File>> ret = new HashMap();
+        Map<String, SequenceWriter> tagToStream = new HashMap();
+        Map<File, SequenceWriter> fileNameToStream = new HashMap();
+        String tagName;
+        File fileName;
+        SequenceWriter stream;
+
+        Map<String, String> barcodeMap = BarcodeUtils.readBarcodeFile(tagFile);
+        barcodeMap.put(NoTag, NoTag);
+
+        for (String barcode : barcodeMap.keySet()) {
+            tagName = barcodeMap.get(barcode);
+            if (hasQuality) {
+                fileName = getFastaFile(workDir, tagName, ".fastq");
+            } else {
+                fileName = getFastaFile(workDir, tagName, ".fasta");
+            }
+
+            stream = fileNameToStream.get(fileName);
+            if (stream == null) {
+                if (!ret.keySet().contains(tagName)) {
+                    ret.put(tagName, new ArrayList());
+                }
+                ret.get(tagName).add(fileName);
+
+                if (hasQuality) {
+                    stream = new FastqWriter(fileName, FastqCore.Phred33QualFunction, defaultQual);
+                } else {
+                    stream = new FastaWriter(fileName);
+                }
+
+                fileNameToStream.put(fileName, stream);
+            }
+
+            tagToStream.put(barcode, stream);
+        }
+
+        SeqReader seqReader;
+
+        Sequence seq;
+        for (File seqFile : seqFiles) {
+
+            seqReader = new SequenceReader(seqFile);
+
+            while ((seq = seqReader.readNextSequence()) != null) {
+
+                boolean tagMatched = false;
+
+                for (String barcode : tagToStream.keySet()) {
+                    if (seq.getSeqString().toLowerCase().indexOf(barcode) == 0) {
+                        tagToStream.get(barcode).writeSeq(seq);
+
+                        tagMatched = true;
+                        break;
+                    }
+                }
+
+                if (!tagMatched) {
+                    tagToStream.get(NoTag).writeSeq(seq);
+                }
+            }
+
+            seqReader.close();
+        }
+
+        for (String tag : tagToStream.keySet()) {
+            tagToStream.get(tag).close();
+        }
+
+
+        for(String tag : ret.keySet()) {
+            List<File> files = ret.get(tag);
+            Set<File> remove = new HashSet();
+
+            for(File f : files) {
+                if(f.exists() && f.length() == 0) {
+                    f.delete();
+                    remove.add(f);
+                }
+            }
+
+            files.removeAll(remove);
+        }
+
+        return ret;
     }
 
     private static Sequence readNextSequence(SequenceReader seqReader, IndexedSeqReader qualReader) throws IOException {

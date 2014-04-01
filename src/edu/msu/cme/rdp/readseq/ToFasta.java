@@ -22,6 +22,10 @@ import edu.msu.cme.rdp.readseq.readers.Sequence;
 import edu.msu.cme.rdp.readseq.readers.SequenceReader;
 import edu.msu.cme.rdp.readseq.writers.FastaWriter;
 import java.io.File;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
 
 /**
  *
@@ -30,36 +34,60 @@ import java.io.File;
 public class ToFasta {
 
     public static void main(String[] args) throws Exception {
-        if (args.length != 1 && args.length != 2) {
-            System.err.println("USAGE: to-fasta <input-file> [mask-seqid]");
+        Options options = new Options();
+        options.addOption("m", "mask", true, "Mask sequence name indicating columns to drop");
+        String maskSeqid = null;
+
+        try {
+            CommandLine line = new PosixParser().parse(options, args);
+
+            if (line.hasOption("mask")) {
+                maskSeqid = line.getOptionValue("mask");
+            }
+
+            args = line.getArgs();
+            if ( args.length == 0){
+                throw new Exception("");
+            }
+
+        } catch (Exception e) {
+            new HelpFormatter().printHelp("USAGE: to-fasta <input-file>", options);
+            System.err.println("ERROR: " + e.getMessage());
+            System.exit(1);
             return;
         }
 
         SeqReader reader = null;
-        int totalSeqs = 0;
-
-        if (args[0].equals("-")) {
-            reader = new SequenceReader(System.in);
-        } else {
-            File seqFile = new File(args[0]);
-
-            if (args.length == 1) {
-                reader = new SequenceReader(seqFile);
-            } else {
-                reader = new IndexedSeqReader(seqFile, args[1]);
-            }
-        }
 
         FastaWriter out = new FastaWriter(System.out);
         Sequence seq;
+        int totalSeqs = 0;
+        long totalTime = System.currentTimeMillis();     
+         
+        for (String fname : args) {
+            if (fname.equals("-")) {
+                reader = new SequenceReader(System.in);
+            } else {
+                File seqFile = new File(fname);
 
-        long startTime = System.currentTimeMillis();
-        while ((seq = reader.readNextSequence()) != null) {
-            out.writeSeq(seq.getSeqName().replace(" ", "_"), seq.getDesc(), seq.getSeqString());
-            totalSeqs++;
+                if (maskSeqid == null) {
+                    reader = new SequenceReader(seqFile);
+                } else {
+                    reader = new IndexedSeqReader(seqFile, maskSeqid);
+                }              
+            }
+
+            long startTime = System.currentTimeMillis();
+            int thisFileTotalSeqs = 0;
+            while ((seq = reader.readNextSequence()) != null) {
+                out.writeSeq(seq.getSeqName().replace(" ", "_"), seq.getDesc(), seq.getSeqString());
+                thisFileTotalSeqs++;
+            }
+            totalSeqs += thisFileTotalSeqs;
+            System.err.println("Converted " + thisFileTotalSeqs + " (total sequences: " + totalSeqs + ") sequences from " + fname + " (" + reader.getFormat() + ") to fasta in " + (System.currentTimeMillis() - startTime) / 1000 + " s");
         }
+            System.err.println("Converted " + totalSeqs + " to fasta in " + (System.currentTimeMillis() - totalTime) / 1000 + " s");
 
-        System.err.println("Converted " + totalSeqs + " sequences from " + args[0] + " (" + reader.getFormat() + ") to fasta in " + (System.currentTimeMillis() - startTime) / 1000 + " s");
         out.close();
     }
 }

@@ -50,14 +50,16 @@ public class SeqFileSplitter {
             out = new FastaWriter(split);
             Sequence seq;
 
-            while ((seq = seqReader.readNextSequence()) != null) {
-                out.writeSeq(seq);
-                if (seqsWritten++ >= seqsPerSplit) {
+            while ((seq = seqReader.readNextSequence()) != null) {                
+                if (seqsWritten >= seqsPerSplit) {
                     out.close();
                     split = new File(outDir, (splitno++) + "_" + seqFileName);
                     ret.add(split);
                     out = new FastaWriter(split);
+                    seqsWritten = 0;
                 }
+                out.writeSeq(seq);
+                seqsWritten ++;
             }
 
             return ret;
@@ -69,7 +71,18 @@ public class SeqFileSplitter {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        String usage = "Usage: SeqFileSplitter infile outdir seq_per_split";
+        if ( args.length != 3){
+            System.err.println(usage);
+            return;
+        }
 
+        int seqpersplit = Integer.parseInt(args[2]);
+        if ( seqpersplit < 1){
+            System.err.println(usage);
+            return;
+        }
+        SeqFileSplitter.splitSeqFile(new File(args[0]), new File(args[1]), seqpersplit);
     }
 }

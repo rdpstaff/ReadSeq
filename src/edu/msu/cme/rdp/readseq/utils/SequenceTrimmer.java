@@ -86,6 +86,11 @@ public class SequenceTrimmer {
 	   Number of Ns in the trim region
 	*/
         int nsInTrim;
+
+	/**
+	   Filled model positions in the region
+	 */
+	float filledRatio;
     }
 
     private static Sequence readRefSeq(File refSeqFile) throws IOException {
@@ -121,6 +126,7 @@ public class SequenceTrimmer {
         int modelPos = 0;
         int seqPos = 0;
         int index;
+	int filled = 0;
 	char b;
 	boolean ischar, isgap, ismodel, isupper, intrim;
 
@@ -135,7 +141,7 @@ public class SequenceTrimmer {
 	    isupper = ischar && Character.isUpperCase(b);
 	    isgap = !ischar && (b == '.' || b == '~' || b == '-');
 	    ismodel = (b == '-') || isupper;
-	    intrim = (modelPos >= trimStart && modelPos < trimStop);	    
+	    intrim = (modelPos >= trimStart && modelPos < trimStop);
 
             if (ischar) {
                 seqPos++;
@@ -158,6 +164,12 @@ public class SequenceTrimmer {
 		    ret.seqTrimStart = seqPos;
 		    alnStart = index;
 		}
+		if(modelPos >= trimStart && modelPos < trimStop) {
+		    filled++;
+		    if(ischar) {
+			ret.filledRatio++;
+		    }
+		}
 
 		if(modelPos == trimStop) {
 		    ret.seqTrimStop = seqPos;
@@ -177,6 +189,7 @@ public class SequenceTrimmer {
 
 	ret.seqLength = seqPos;
 	ret.modelLength = modelPos;
+	ret.filledRatio /= filled;
 
 	return ret;
     }
@@ -204,6 +217,10 @@ public class SequenceTrimmer {
 
 	    modelPos++;
 	}
+
+        if(stop == 0) {
+            stop = bases.length;
+        }
 
 	return new String(Arrays.copyOfRange(bases, start, stop));
     }
@@ -243,12 +260,12 @@ public class SequenceTrimmer {
         throw new IllegalArgumentException("Dunno what to do with out value " + out);
     }
 
-    public static boolean didSeqPass(TrimStats stats, int minLength, int minTrimLength, int maxNs, int maxTrimNs) {
+    public static boolean didSeqPass(TrimStats stats, int minLength, int minTrimLength, int maxNs, int maxTrimNs, float minFilledRatio) {
 	if(stats.trimmedLength <= minTrimLength) {
 	    return false;
 	}
 
-	if(stats.seqLength <= minLength) {
+	if(stats.trimmedLength <= minLength) {
 	    return false;
 	}
 
@@ -260,15 +277,19 @@ public class SequenceTrimmer {
 	    return false;
 	}
 
+	if(stats.filledRatio < minFilledRatio) {
+	    return false;
+	}
+
 	return true;
     }
 
     public static void writeStatsHeader(PrintWriter out) {
-	out.println("#seq name\tfirst model pos\tlast model pos\ttrim seq start coord\ttrim seq end coord\tNs\tNs in trimmed seq\ttrimmed seq length\tseq length\tpassed trimming");
+	out.println("#seq name\tfirst model pos\tlast model pos\tfilled ratio\ttrim seq start coord\ttrim seq end coord\tNs\tNs in trimmed seq\ttrimmed seq length\tseq length\tpassed trimming");
     }
 
     public static void writeStats(PrintWriter out, String seqName, TrimStats stats, boolean passed) {
-	out.println(String.format("%s\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%b", seqName, stats.seqStart, stats.seqStop, stats.seqTrimStart, stats.seqTrimStop, stats.numNs, stats.nsInTrim, stats.trimmedLength, stats.seqLength, passed));
+	out.println(String.format("%s\t%d\t%d\t%.2f\t%d\t%d\t%d\t%d\t%d\t%d\t%b", seqName, stats.seqStart, stats.seqStop, stats.filledRatio, stats.seqTrimStart, stats.seqTrimStop, stats.numNs, stats.nsInTrim, stats.trimmedLength, stats.seqLength, passed));
     }
 
     public static void main(String[] args) throws IOException {
@@ -276,6 +297,7 @@ public class SequenceTrimmer {
         options.addOption("r", "ref-seq", true, "Trim points are given as positions in a reference sequence from this file");
         options.addOption("i", "inclusive", false, "Trim points are inclusive");
         options.addOption("l", "length", true, "Minimum length of sequence after trimming");
+        options.addOption("f", "filled-ratio", true, "Minimum ratio of filled model positions of sequence after trimming");
         options.addOption("o", "out", true, "Write sequences to directory (default=cwd)");
         options.addOption("s", "stats", true, "Write stats to file");
 
@@ -289,6 +311,7 @@ public class SequenceTrimmer {
         int trimStart = 0;
         int trimStop = 0;
         Sequence refSeq = null;
+	float minFilledRatio = 0;
 
         int expectedModelPos = -1;
         String[] inputFiles = null;
@@ -306,6 +329,10 @@ public class SequenceTrimmer {
 
             if (line.hasOption("length")) {
                 minLength = Integer.valueOf(line.getOptionValue("length"));
+            }
+
+            if (line.hasOption("filled-ratio")) {
+                minFilledRatio = Float.valueOf(line.getOptionValue("filled-ratio"));
             }
 
             if (line.hasOption("out")) {
@@ -346,6 +373,7 @@ public class SequenceTrimmer {
         System.err.println("*  Minimum Length:        " + minLength);
         System.err.println("*  Trim point inclusive?: " + inclusive);
         System.err.println("*  Trim points:           " + trimStart + "-" + trimStop);
+        System.err.println("*  Min filled ratio:      " + minFilledRatio);
         System.err.println("*  refSeq:                " + ((refSeq == null) ? "model" : refSeq.getSeqName() + " " + refSeq.getDesc()));
 
         Sequence seq;
@@ -368,7 +396,7 @@ public class SequenceTrimmer {
 		}
 
 		stats = getStats(seq, trimStart, trimStop);
-		boolean passed = didSeqPass(stats, minLength, minTrimmedLength, maxNs, maxTrimNs);
+		boolean passed = didSeqPass(stats, minLength, minTrimmedLength, maxNs, maxTrimNs, minFilledRatio);
 		writeStats(statsOut, seq.getSeqName(), stats, passed);
 		if(passed) {
 		    seqWriter.writeSeq(seq.getSeqName(), seq.getDesc(), new String(stats.trimmedBases));

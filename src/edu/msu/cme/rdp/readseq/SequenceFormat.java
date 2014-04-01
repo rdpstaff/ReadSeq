@@ -22,5 +22,5 @@ package edu.msu.cme.rdp.readseq;
  */
 public enum SequenceFormat {
 
-    FASTA, FASTQ, STK, GENBANK, EMBL, UNKNOWN, SFF, SRF, EMPTY, IN_MEMORY
+    FASTA, FASTQ, STK, GENBANK, EMBL, UNKNOWN, SFF, SRF, EMPTY, IN_MEMORY, GZIP
 };

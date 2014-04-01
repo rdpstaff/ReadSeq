@@ -16,9 +16,13 @@
  */
 package edu.msu.cme.rdp.readseq.utils;
 
+import edu.msu.cme.rdp.readseq.QSequence;
 import edu.msu.cme.rdp.readseq.readers.SequenceReader;
 import edu.msu.cme.rdp.readseq.readers.Sequence;
+import edu.msu.cme.rdp.readseq.readers.core.FastqCore;
 import edu.msu.cme.rdp.readseq.writers.FastaWriter;
+import edu.msu.cme.rdp.readseq.writers.FastqWriter;
+import edu.msu.cme.rdp.readseq.writers.SequenceWriter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -33,15 +37,24 @@ import java.util.Set;
 public class SequenceSelector {
 
     public static void main(String[] args) throws IOException {
-        if (args.length < 3) {
-            System.err.println("USAGE: SequenceSelector <ids_file> <keep | remove> <seq_file>");
+        if (args.length < 5) {
+            System.err.println("USAGE: SequenceSelector ids_file outfile outputformat keep seqfile(s) \n"  +
+             "Input format is fasta or fastq. The outputformat can be either fasta or fastq if inputs are fastq\n" + 
+             "If keep is false, the sequences will be remove from output ");
             System.exit(1);
         }
 
-        File idFile = new File(args[0]);
-        boolean keep = args[1].equals("keep");
-        File seqFile = new File(args[2]);
-
+        File idFile = new File(args[0]);        
+        SequenceWriter out = null;     
+        if ( args[2].equalsIgnoreCase("fasta")){
+            out = new FastaWriter(args[1]);
+        } else if ( args[2].equalsIgnoreCase("fastq")){
+            out = new FastqWriter(args[1], FastqCore.Phred33QualFunction);
+        } else {
+            throw new IllegalArgumentException("only fasta and fastq output are supported");
+        }
+        boolean keep =  Boolean.parseBoolean(args[3]);
+        
         Set<String> ids = new HashSet();
         String line;
         BufferedReader reader = new BufferedReader(new FileReader(idFile));
@@ -52,30 +65,31 @@ public class SequenceSelector {
             }
         }
         reader.close();
-
-        System.err.println("Read in " + ids.size() + " ids to " + (keep ? "keep" : "remove"));
-
         Sequence seq;
         boolean contains;
-        FastaWriter out = new FastaWriter(System.out);
-
-        int foundSeqs = 0;
-        int totalSeqs = 0;
-        long startTime = System.currentTimeMillis();
-        for (int index = 2; index < args.length; index++) {
+        
+        for (int index = 4; index < args.length; index++) {
             SequenceReader seqReader = new SequenceReader(new File(args[index]));
+            seq = seqReader.readNextSequence();
+          
+            if ( (out instanceof FastqWriter) && !(seq instanceof QSequence) ) {
+                throw new IllegalArgumentException("input file " + args[index] + " format is not fastq, can not write fastq output");
+            } 
+            
+            contains = ids.contains(seq.getSeqName());
+            if ((contains && keep) || (!contains && !keep)) {
+                out.writeSeq(seq);
+            }
+
             while ((seq = seqReader.readNextSequence()) != null) {
                 contains = ids.contains(seq.getSeqName());
                 if ((contains && keep) || (!contains && !keep)) {
-                    foundSeqs++;
                     out.writeSeq(seq);
                 }
-
-                totalSeqs++;
             }
             seqReader.close();
         }
+        out.close();
 
-        System.err.println("Wrote out " + foundSeqs + " / " + totalSeqs + " sequences in " + (System.currentTimeMillis() - startTime));
     }
 }

@@ -18,8 +18,16 @@ package edu.msu.cme.rdp.readseq.utils;
 
 import edu.msu.cme.rdp.readseq.SequenceFormat;
 import edu.msu.cme.rdp.readseq.SequenceType;
+import edu.msu.cme.rdp.readseq.readers.SeqReader;
 import edu.msu.cme.rdp.readseq.readers.SequenceReader;
 import edu.msu.cme.rdp.readseq.readers.Sequence;
+import edu.msu.cme.rdp.readseq.readers.core.EMBLCore;
+import edu.msu.cme.rdp.readseq.readers.core.FastaCore;
+import edu.msu.cme.rdp.readseq.readers.core.FastqCore;
+import edu.msu.cme.rdp.readseq.readers.core.GenbankCore;
+import edu.msu.cme.rdp.readseq.readers.core.SFFCore;
+import edu.msu.cme.rdp.readseq.readers.core.STKCore;
+import edu.msu.cme.rdp.readseq.readers.core.SeqReaderCore;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -36,6 +44,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
 
 /**
  *
@@ -50,28 +59,28 @@ public class SeqUtils {
     public static final int GENBANK_MAGIC_NUMBER = 1280262997;
     public static final int EMBL_MAGIC_NUMBER = 1229201440;
     public static final Set<Character> RNAAlphabet = Collections.unmodifiableSet(new HashSet(Arrays.asList(new Character[]{
-                'A', 'a', 'C', 'c', 'G', 'g', 'U', 'u', 'T', 't', 'M', 'm', 'R', 'r', 'W', 'w', 'S', 's', 'Y', 'y', 'K', 'k', 'B', 'b', 'H', 'h', 'V', 'v', 'D', 'd', 'N', 'n', 'I', 'i'
-            })));
+        'A', 'a', 'C', 'c', 'G', 'g', 'U', 'u', 'T', 't', 'M', 'm', 'R', 'r', 'W', 'w', 'S', 's', 'Y', 'y', 'K', 'k', 'B', 'b', 'H', 'h', 'V', 'v', 'D', 'd', 'N', 'n', 'I', 'i'
+    })));
     public static final Set<Character> proteinAlphabet = Collections.unmodifiableSet(new HashSet(Arrays.asList(new Character[]{
-                'A', 'a', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'V', 'v', 'W', 'w', 'Y', 'y', 'Z', 'z', 'B', 'b', 'X', 'x', 'u', 'U', 'j', 'J', '*'
-            })));
+        'A', 'a', 'C', 'c', 'D', 'd', 'E', 'e', 'F', 'f', 'G', 'g', 'H', 'h', 'I', 'i', 'K', 'k', 'L', 'l', 'M', 'm', 'N', 'n', 'P', 'p', 'Q', 'q', 'R', 'r', 'S', 's', 'T', 't', 'V', 'v', 'W', 'w', 'Y', 'y', 'Z', 'z', 'B', 'b', 'X', 'x', 'u', 'U', 'j', 'J', '*'
+    })));
     public static final Set<Character> rrnaAmbiguity = Collections.unmodifiableSet(new HashSet(Arrays.asList(new Character[]{
-                'y', 'Y',
-                'r', 'R',
-                'w', 'W',
-                's', 'S',
-                'k', 'K',
-                'm', 'M',
-                'd', 'D',
-                'v', 'V',
-                'h', 'H',
-                'b', 'B',
-                'x', 'X',
-                'n', 'N'
-            })));
+        'y', 'Y',
+        'r', 'R',
+        'w', 'W',
+        's', 'S',
+        'k', 'K',
+        'm', 'M',
+        'd', 'D',
+        'v', 'V',
+        'h', 'H',
+        'b', 'B',
+        'x', 'X',
+        'n', 'N'
+    })));
     public static final Set<Character> proteinAmbiguity = Collections.unmodifiableSet(new HashSet(Arrays.asList(new Character[]{
-                'x', 'X'
-            })));
+        'x', 'X', '*'
+    })));
     public static final byte[] IUPAC = new byte[127];
     public static final byte NON_COMPAREABLE = Byte.parseByte("0110" + "0000", 2);
     public static final byte A = (byte) (Byte.parseByte("0000" + "0001", 2));
@@ -138,6 +147,55 @@ public class SeqUtils {
         return seqBytes;
     }
 
+    public static String fromBytes(byte[] bases) {
+        StringBuilder ret = new StringBuilder();
+
+        for (byte base : bases) {
+
+            if (base == A) {
+                ret.append('A');
+            } else if (base == C) {
+                ret.append('C');
+            } else if (base == G) {
+                ret.append('G');
+            } else if (base == U) {
+                ret.append('T');
+            } else if (base == GAP) {
+                ret.append('-');
+            } else if (base == Y) {
+                ret.append('Y');
+            } else if (base == R) {
+                ret.append('R');
+            } else if (base == W) {
+                ret.append('W');
+            } else if (base == S) {
+                ret.append('S');
+            } else if (base == K) {
+                ret.append('K');
+            } else if (base == M) {
+                ret.append('M');
+            } else if (base == D) {
+                ret.append('D');
+            } else if (base == V) {
+                ret.append('V');
+            } else if (base == H) {
+                ret.append('H');
+            } else if (base == B) {
+                ret.append('B');
+            } else if (base == N) {
+                ret.append('N');
+            } else {
+                ret.append('?');
+            }
+        }
+
+        return ret.toString();
+    }
+
+    public static Sequence getMaskedSeq(Sequence seq, char[] maskSeq) {
+        return new Sequence(seq.getSeqName(), seq.getDesc(), getMaskedSeq(seq.getSeqString(), maskSeq));
+    }
+
     public static String getMaskedSeq(String bases, char[] maskSeq) {
         StringBuilder ret = new StringBuilder();
 
@@ -160,12 +218,16 @@ public class SeqUtils {
         return ret.toString();
     }
 
+    public static Sequence getMaskedBySeqString(Sequence seq) {
+        return new Sequence(seq.getSeqName(), seq.getDesc(), getMaskedBySeqString(seq.getSeqString()));
+    }
+
     public static String getMaskedBySeqString(String seqString) {
         StringBuilder ret = new StringBuilder();
         char[] bases = seqString.toCharArray();
 
-        for(int index = 0;index < bases.length;index++) {
-            if(bases[index] == '-' || Character.isUpperCase(bases[index])) {
+        for (int index = 0; index < bases.length; index++) {
+            if (bases[index] == '-' || Character.isUpperCase(bases[index])) {
                 ret.append(bases[index]);
             }
         }
@@ -174,7 +236,8 @@ public class SeqUtils {
     }
 
     /**
-     * Filters out gap characters if ignoreGaps is true and removes all white space
+     * Filters out gap characters if ignoreGaps is true and removes all white
+     * space
      *
      * @param seqString
      * @param ignoreGaps
@@ -192,6 +255,64 @@ public class SeqUtils {
         }
 
         return ret.toString();
+    }
+
+    public static SeqReaderCore getSeqReaderCore(File f) throws IOException {
+        SequenceFormat format = SeqUtils.guessFileFormat(f);
+        SeqReaderCore core;
+        if (format == SequenceFormat.GZIP) {
+            return getSeqReaderCore(new GZIPInputStream(new FileInputStream(f)));
+        } else if (format == SequenceFormat.FASTA) {
+            core = new FastaCore(f);
+        } else if (format == SequenceFormat.FASTQ) {
+            core = new FastqCore(f);
+        } else if (format == SequenceFormat.SFF) {
+            core = new SFFCore(f);
+        } else if (format == SequenceFormat.STK) {
+            core = new STKCore(f);
+        } else if (format == SequenceFormat.EMBL) {
+            core = new EMBLCore(f);
+        } else if (format == SequenceFormat.GENBANK) {
+            core = new GenbankCore(f);
+        } else if (format == SequenceFormat.EMPTY) {
+            core = new SeqReaderCore.EmptyCore(f);
+        } else {
+            throw new IOException("Unable to process file format " + format);
+        }
+
+        return core;
+    }
+
+    public static SeqReaderCore getSeqReaderCore(InputStream is) throws IOException {
+        BufferedInputStream in;
+        if (is instanceof BufferedInputStream) {
+            in = (BufferedInputStream) is;
+        } else {
+            in = new BufferedInputStream(is);
+        }
+
+        SequenceFormat format = SeqUtils.guessSequenceFormat(in);
+        SeqReaderCore core;
+
+        if (format == SequenceFormat.GZIP) {
+            return getSeqReaderCore(new GZIPInputStream(is));
+        } else if (format == SequenceFormat.FASTA) {
+            core = new FastaCore(in);
+        } else if (format == SequenceFormat.FASTQ) {
+            core = new FastqCore(in);
+        } else if (format == SequenceFormat.SFF) {
+            core = new SFFCore(in);
+        } else if (format == SequenceFormat.EMBL) {
+            core = new EMBLCore(in);
+        } else if (format == SequenceFormat.GENBANK) {
+            core = new GenbankCore(in);
+        } else if (format == SequenceFormat.EMPTY) {
+            core = new SeqReaderCore.EmptyCore(in);
+        } else {
+            throw new IOException("Unable to process file format " + format);
+        }
+
+        return core;
     }
 
     /**
@@ -217,7 +338,7 @@ public class SeqUtils {
         return format;
     }
 
-    public static SequenceFormat guessSequenceFormat(BufferedInputStream in) throws IOException {
+    public static SequenceFormat guessSequenceFormat(InputStream in) throws IOException {
         if (!in.markSupported()) {
             throw new IOException("Cannot test sequence format of an input stream that doesn't support marking");
         }
@@ -241,8 +362,14 @@ public class SeqUtils {
                     return SequenceFormat.EMBL;
             }
 
-            magicNumber >>= 24; //Shift us to the left most word hack to detect fasta/fastq that don't have a 4 byte magic number
-            //Remember, an ascii character is 7 bytes
+            magicNumber >>= 16;
+
+            if (((magicNumber >> 8) | ((magicNumber & 0xff) << 8)) == GZIPInputStream.GZIP_MAGIC) {
+                return SequenceFormat.GZIP;
+            }
+
+            magicNumber >>= 8; //Shift us to the left most word hack to detect fasta/fastq that don't have a 4 byte magic number
+            //Remember, an ascii character is 7 bits
 
             if (magicNumber == '>') {
                 return SequenceFormat.FASTA;
@@ -292,11 +419,13 @@ public class SeqUtils {
     }
 
     /**
-     * Find the start and end points for an aligned sequence (first location of a base)
-     * This method assumes that all non-model position gaps are the '.' character
+     * Find the start and end points for an aligned sequence (first location of
+     * a base) This method assumes that all non-model position gaps are the '.'
+     * character
      *
      * @param seqString Sequence to test
-     * @return 2 element array with the first element as the start and the second element as the end (in model positions)
+     * @return 2 element array with the first element as the start and the
+     * second element as the end (in model positions)
      */
     public static int[] getSeqEndPoints(String seqString) {
         SequenceStats stats = new SequenceStats(seqString);
@@ -305,7 +434,8 @@ public class SeqUtils {
     }
 
     /**
-     * Strips all gap characters ('.', '-', '~') and white space then lower cases the supplied string to get the unaligned sequence
+     * Strips all gap characters ('.', '-', '~') and white space then lower
+     * cases the supplied string to get the unaligned sequence
      *
      * @param seqString
      * @return
@@ -315,7 +445,8 @@ public class SeqUtils {
     }
 
     /**
-     * Strips all gap characters ('.', '-', '~') and white space then lower cases the supplied string to get the unaligned sequence
+     * Strips all gap characters ('.', '-', '~') and white space then lower
+     * cases the supplied string to get the unaligned sequence
      *
      * @param seqString
      * @return
@@ -328,8 +459,7 @@ public class SeqUtils {
      *
      * Generates a mapping of model positions to reference sequence positions
      *
-     * Model position start = 1
-     * Ref sequence start = 1
+     * Model position start = 1 Ref sequence start = 1
      *
      * @param referenceSeq
      * @return
@@ -369,7 +499,9 @@ public class SeqUtils {
     }
 
     /**
-     * Turns an array of bytes in to a string of the numeric values they represent
+     * Turns an array of bytes in to a string of the numeric values they
+     * represent
+     *
      * @param qual
      * @return
      */
@@ -382,9 +514,37 @@ public class SeqUtils {
         return ret.toString();
     }
 
+    public static int countSequences(List<File> seqFiles) throws IOException {
+        int seqCount = 0;
+        Sequence seq;
+        SeqReader reader;
+
+        for (File file : seqFiles) {
+            reader = null;
+            try {
+                reader = new SequenceReader(file);
+                while ((seq = reader.readNextSequence()) != null) {
+                    if (!seq.getSeqName().startsWith("#")) {
+                        seqCount++;
+                    }
+                }
+            } catch (IOException e) {
+                throw new IOException("Invalid sequence found in file " + file.getName());
+            } finally {
+                if (reader != null) {
+                    reader.close();
+                }
+            }
+        }
+
+        return seqCount;
+    }
+
     public static void main(String[] args) throws IOException {
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(">   ".getBytes()));
         int fasta = dis.readInt();
+
+        System.out.println(SeqUtils.guessFileFormat(new File("test/test.fa.gz")));
 
         //System.out.println(fasta & 0xf0000000);
         System.out.println(fasta >> 24);

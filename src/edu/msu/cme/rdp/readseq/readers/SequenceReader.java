@@ -43,50 +43,13 @@ public class SequenceReader implements SeqReader {
     private SequenceFormat format;
 
     public SequenceReader(File f) throws IOException {
+        core = SeqUtils.getSeqReaderCore(f);
         format = SeqUtils.guessFileFormat(f);
-        if (format == SequenceFormat.FASTA) {
-            core = new FastaCore(f);
-        } else if (format == SequenceFormat.FASTQ) {
-            core = new FastqCore(f);
-        } else if (format == SequenceFormat.SFF) {
-            core = new SFFCore(f);
-        } else if (format == SequenceFormat.STK) {
-            core = new STKCore(f);
-        } else if (format == SequenceFormat.EMBL) {
-            core = new EMBLCore(f);
-        } else if (format == SequenceFormat.GENBANK) {
-            core = new GenbankCore(f);
-        } else if (format == SequenceFormat.EMPTY) {
-            core = new EmptyCore(f);
-        } else {
-            throw new IOException("Unable to process file format " + format);
-        }
     }
 
     public SequenceReader(InputStream in) throws IOException {
-        BufferedInputStream is;
-        if(!(in instanceof BufferedInputStream)) {
-            is = new BufferedInputStream(in);
-        } else {
-            is = (BufferedInputStream)in;
-        }
-
-        format = SeqUtils.guessSequenceFormat(is);
-        if (format == SequenceFormat.FASTA) {
-            core = new FastaCore(is);
-        } else if (format == SequenceFormat.FASTQ) {
-            core = new FastqCore(is);
-        } else if (format == SequenceFormat.SFF) {
-            core = new SFFCore(is);
-        } else if (format == SequenceFormat.EMBL) {
-            core = new EMBLCore(is);
-        } else if (format == SequenceFormat.GENBANK) {
-            core = new GenbankCore(is);
-        }else if (format == SequenceFormat.EMPTY) {
-            core = new EmptyCore(is);
-        } else {
-            throw new IOException("Unable to process file format " + format);
-        }
+        core = SeqUtils.getSeqReaderCore(in);
+        format = SequenceFormat.UNKNOWN; //XXX hack
     }
 
     public SequenceFormat getFormat() {

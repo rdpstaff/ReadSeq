@@ -25,6 +25,8 @@ import edu.msu.cme.rdp.readseq.readers.core.FastqCore;
 import edu.msu.cme.rdp.readseq.writers.FastaWriter;
 import edu.msu.cme.rdp.readseq.writers.FastqWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.util.zip.GZIPInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -100,7 +102,11 @@ public class QualityTrimmer {
                     reader = new QSeqReader(seqFile, qualFile);
                     index++;
                 } else {
-                    reader = new SequenceReader(seqFile);
+		    if(seqFile.getName().endsWith(".gz")) {
+			reader = new SequenceReader(new GZIPInputStream(new FileInputStream(seqFile)));
+		    } else {
+			reader = new SequenceReader(seqFile);
+		    }
                 }
 
                 readers.add(reader);
@@ -108,6 +114,7 @@ public class QualityTrimmer {
             }
         } catch (Exception e) {
             new HelpFormatter().printHelp("USAGE: QualityTrimmer [options] <ascii_score> <seq_file> [qual_file]", options, true);
+	    System.err.println("Error: " + e.getMessage());
             System.exit(1);
         }
 

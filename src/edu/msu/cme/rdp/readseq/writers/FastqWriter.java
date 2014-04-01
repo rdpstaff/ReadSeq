@@ -33,6 +33,7 @@ public class FastqWriter implements SequenceWriter {
 
     private PrintStream out;
     private QualityFunction qualFunction;
+    private Byte defaultQuality;
 
     public FastqWriter(OutputStream is, QualityFunction qualFunction) {
         this(new PrintStream(is), qualFunction);
@@ -46,21 +47,34 @@ public class FastqWriter implements SequenceWriter {
         this(new PrintStream(f), qualFunction);
     }
 
+    public FastqWriter(File f, QualityFunction qualFunction, byte defaultQual) throws IOException {
+        this(new PrintStream(f), qualFunction, defaultQual);
+    }
+
     public FastqWriter(PrintStream pw, QualityFunction qualFunction) {
         this.out = pw;
         this.qualFunction = qualFunction;
+    }
+
+    public FastqWriter(PrintStream pw, QualityFunction qualFunction, byte defaultQual) {
+        this(pw, qualFunction);
+        defaultQuality = defaultQual;
     }
 
     public void close() {
         out.close();
     }
 
-    private static byte[] b = new byte[100];
-
     public void writeSeq(Sequence seq) throws IOException {
         if(seq.getClass() ==  QSequence.class) {
             QSequence s = (QSequence)seq;
             writeSeq(s.getSeqName(), s.getDesc(), s.getSeqString(), s.getQuality());
+        } else if(defaultQuality != null) {
+            byte[] qual = new byte[seq.getSeqString().length()];
+            for(int index = 0;index < qual.length;index++) {
+                qual[index] = defaultQuality;
+            }
+            writeSeq(seq.getSeqName(), seq.getDesc(), seq.getSeqString(), qual);
         } else {
             throw new IOException("Fastq writer can only write QSequences");
         }
