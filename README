@@ -6,3 +6,13 @@ java -jar dist/ReadSeq.jar
 Description
 ============
 Sequence reading library developed by the Ribosomal Database Project.  Can handle genbank, embl, fasta, fastq, sff and sto files.  Can read from files or streams, and can handle indexing files.
+
+USAGE: ReadSeqMain <subcommand> <subcommand args ...>
+	random-sample  - random select a subset or subregion of sequences
+	reverse-comp   - reverse complment seqeunces
+	rm-dupseq       - remove identical or any sequence contained by another sequence
+	select-seqs    - select or deselect sequences from a file
+	split          - split sequences
+	to-fasta       - convert to fasta format
+	to-fastq       - convert to fastq format
+
