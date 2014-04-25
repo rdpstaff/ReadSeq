@@ -38,9 +38,9 @@ public class SequenceSelector {
 
     public static void main(String[] args) throws IOException {
         if (args.length < 5) {
-            System.err.println("USAGE: SequenceSelector ids_file outfile outputformat keep seqfile(s) \n"  +
+            System.err.println("USAGE: SequenceSelector ids_file outfile outputformat keep[Y|N] seqfile(s) \n"  +
              "Input format is fasta or fastq. The outputformat can be either fasta or fastq if inputs are fastq\n" + 
-             "If keep is false, the sequences will be remove from output ");
+             "Default is to keep the sequences in the ids_file. If keep is false or N, the sequences will be removed from output ");
             System.exit(1);
         }
 
@@ -53,8 +53,12 @@ public class SequenceSelector {
         } else {
             throw new IllegalArgumentException("only fasta and fastq output are supported");
         }
-        boolean keep =  Boolean.parseBoolean(args[3]);
         
+        boolean keep =  true;
+        if ( args[3].equalsIgnoreCase("N") || args[3].equalsIgnoreCase("false")){
+            keep = false;
+        }
+                
         Set<String> ids = new HashSet();
         String line;
         BufferedReader reader = new BufferedReader(new FileReader(idFile));
@@ -68,10 +72,10 @@ public class SequenceSelector {
         Sequence seq;
         boolean contains;
         
+        HashSet<String> foundIds = new HashSet<String>();
         for (int index = 4; index < args.length; index++) {
             SequenceReader seqReader = new SequenceReader(new File(args[index]));
             seq = seqReader.readNextSequence();
-          
             if ( (out instanceof FastqWriter) && !(seq instanceof QSequence) ) {
                 throw new IllegalArgumentException("input file " + args[index] + " format is not fastq, can not write fastq output");
             } 
@@ -79,13 +83,23 @@ public class SequenceSelector {
             contains = ids.contains(seq.getSeqName());
             if ((contains && keep) || (!contains && !keep)) {
                 out.writeSeq(seq);
+                if ( keep){
+                    foundIds.add(seq.getSeqName());
+                }
             }
 
             while ((seq = seqReader.readNextSequence()) != null) {
                 contains = ids.contains(seq.getSeqName());
                 if ((contains && keep) || (!contains && !keep)) {
                     out.writeSeq(seq);
+                    if ( keep ){
+                        foundIds.add(seq.getSeqName());
+                        if (foundIds.size() == ids.size()) {
+                            break;
+                        }
+                    }
                 }
+               
             }
             seqReader.close();
         }

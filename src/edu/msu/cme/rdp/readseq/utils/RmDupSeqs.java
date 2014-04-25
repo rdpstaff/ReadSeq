@@ -21,7 +21,9 @@ import edu.msu.cme.rdp.readseq.readers.IndexedSeqReader;
 import edu.msu.cme.rdp.readseq.readers.Sequence;
 import edu.msu.cme.rdp.readseq.readers.SequenceReader;
 import edu.msu.cme.rdp.readseq.writers.FastaWriter;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,11 +51,11 @@ public class RmDupSeqs {
     public static void filterDuplicates(String inFile, String outFile, int length, boolean debug) throws IOException{       
         HashMap<String, String> idSet = new HashMap<String, String>();
         IndexedSeqReader reader = new IndexedSeqReader(new File(inFile));
-        FastaWriter outWriter = new FastaWriter(outFile);
+        BufferedWriter outWriter = new BufferedWriter(new FileWriter(new File(outFile)));
         Set<String> allseqIDset = reader.getSeqIdSet();
         Sequence seq;
         if ( debug){
-            System.out.println("ID" + "\tcontained_by_ID");
+            System.out.println("ID\tdescription" + "\tcontained_by_ID\tdescription");
         }
         for ( String id : allseqIDset) {
             seq = reader.readSeq(id);
@@ -65,7 +67,8 @@ public class RmDupSeqs {
                     if ( exSeq.contains(seq.getSeqString())){
                         dup = true;
                         if ( debug){
-                            System.out.println(id + "\t" + exID);
+                            Sequence temp = reader.readSeq(exID);
+                            System.out.println(id + "\t" + seq.getDesc() + "\t" + exID + "\t" + temp.getDesc());
                         }
                         break;
                     }
@@ -80,7 +83,8 @@ public class RmDupSeqs {
             for ( String dupid: tempdupSet){
                 idSet.remove(dupid);  
                 if ( debug){
-                    System.out.println(dupid + "\t" + id);
+                    Sequence temp = reader.readSeq(dupid);
+                    System.out.println(dupid + "\t" + temp.getDesc() + "\t"+ id + "\t" + seq.getDesc());
                 }
             }
         }
@@ -88,7 +92,7 @@ public class RmDupSeqs {
         for ( String id: idSet.keySet()){
             seq = reader.readSeq(id);
             if ( seq.getSeqString().length() >= length){
-                outWriter.writeSeq(seq);
+                outWriter.write(">" + id + "\t" + seq.getDesc() + "\n" + seq.getSeqString() + "\n");
             }
         }
          reader.close();
