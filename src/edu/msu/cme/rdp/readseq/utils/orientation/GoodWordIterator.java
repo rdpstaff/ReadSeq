@@ -164,6 +164,10 @@ public class GoodWordIterator {
         }
         return WORDSIZE;
     }
+    
+    public static boolean isWordsizeHasSet(){
+        return wordsizeHasSet;
+    }
 
     public int getMask() {
         return MASK;

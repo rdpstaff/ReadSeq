@@ -36,7 +36,9 @@ public class NuclSeqMatch extends KmerMatchCore {
     private HashMap<String, WordSequence> seqWordMap = new HashMap<String, WordSequence> ();
     
     public NuclSeqMatch(String seqfile, int wordSize) throws IOException {
-        GoodWordIterator.setWordSize(wordSize);
+        if ( !GoodWordIterator.isWordsizeHasSet()){
+            GoodWordIterator.setWordSize(wordSize);
+        }
         setsize = (int) Math.pow(4, GoodWordIterator.getWordsize() );
         SequenceReader parser = new SequenceReader(new File(seqfile));
         Sequence seq;
@@ -59,8 +61,10 @@ public class NuclSeqMatch extends KmerMatchCore {
         this(refSeqs,  GoodWordIterator.DEFAULT_WORDSIZE);
     }
     
-    public NuclSeqMatch(List<Sequence> refSeqs, int wordSize) throws IOException{  
-        GoodWordIterator.setWordSize(wordSize);
+    public NuclSeqMatch(List<Sequence> refSeqs, int wordSize) throws IOException{ 
+        if ( !GoodWordIterator.isWordsizeHasSet()){
+            GoodWordIterator.setWordSize(wordSize);
+        }
         for (Sequence seq: refSeqs){
             GoodWordIterator generator = new GoodWordIterator(seq.getSeqString());
             WordSequence wordSeq = new WordSequence(seq);
