@@ -78,7 +78,7 @@ public class ResampleSeqFile {
             throw new IllegalArgumentException("The smallest sample size is " + min_num_of_seqs +". Please modify the value for option num_selection");
         }
         
-        String subregion = (subregion_length == 0) ? "": subregion_length + "bp_";
+        String subregion = (subregion_length == 0) ? "": "_" + subregion_length + "bp";
         
         if ( infile.isDirectory() ) {
             for ( File f: infile.listFiles()){
@@ -86,7 +86,15 @@ public class ResampleSeqFile {
                 selectOne(f, num_of_seqs, subregion_length, outfile);
             }
         }else {
-            File outfile = new File( outdir, "subset_" + subregion + infile.getName());
+            String infile_prefix = infile.getName();
+            String infile_suffix = "";
+            int index = infile.getName().lastIndexOf(".");
+            
+            if ( index != -1){
+                infile_prefix = infile.getName().substring(0, index);
+                infile_suffix = infile.getName().substring(index);
+            }
+            File outfile = new File( outdir, infile_prefix + ".sub" + subregion + infile_suffix);
             selectOne(infile, num_of_seqs, subregion_length, outfile);
         }
     }
@@ -183,8 +191,6 @@ public class ResampleSeqFile {
             new HelpFormatter().printHelp(120, "ResampleSeqFile [options] <infile(dir)> <outdir>", "", options, "");
             System.out.println("ERROR: " + e.getMessage());
             return;
-        }
-        
-              
+        } 
     }
 }
