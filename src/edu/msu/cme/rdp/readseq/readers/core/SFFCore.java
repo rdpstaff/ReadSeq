@@ -262,15 +262,17 @@ public class SFFCore extends SeqReaderCore {
         int clipLeft = Math.max(readBlock.clipAdapterLeft, readBlock.clipQualLeft);
         int clipRight = readBlock.numBases;
 
-        if (readBlock.clipAdapterRight != 0 && readBlock.clipAdapterRight < clipRight) {
+        if (readBlock.clipAdapterRight > 0 && readBlock.clipAdapterRight < clipRight) {
             clipRight = readBlock.clipAdapterRight;
         }
 
         if (readBlock.clipQualRight != 0 && readBlock.clipQualRight < clipRight) {
             clipRight = readBlock.clipQualRight;
         }
-
+        if (clipLeft  > clipRight )
+           return readNextSeq(); 
         String seq = readBlock.seq.substring(clipLeft - 1, clipRight);
+        
 
         return new QSequence(readBlock.name, "", seq, Arrays.copyOfRange(readBlock.qual, clipLeft - 1, clipRight));
     }
@@ -294,10 +296,10 @@ public class SFFCore extends SeqReaderCore {
 	    }
 
             ret.numBases = seqFile.readInt();
-            ret.clipQualLeft = seqFile.readShort();
-            ret.clipQualRight = seqFile.readShort();
-            ret.clipAdapterLeft = seqFile.readShort();
-            ret.clipAdapterRight = seqFile.readShort();
+            ret.clipQualLeft = seqFile.readUnsignedShort();
+            ret.clipQualRight = seqFile.readUnsignedShort();
+            ret.clipAdapterLeft = seqFile.readUnsignedShort();
+            ret.clipAdapterRight = seqFile.readUnsignedShort();
 
             byte[] readName = new byte[ret.nameLength];
             super.read(readName);
@@ -337,7 +339,6 @@ public class SFFCore extends SeqReaderCore {
             ret.flowIndex = flowgramIndex;
             ret.seq = new String(bases);
             ret.qual = quality;
-
             int bytesRead = homopolymerStretchEstimates.length + flowgramIndex.length + bases.length + quality.length;
 
             alignToBoundary(bytesRead);
