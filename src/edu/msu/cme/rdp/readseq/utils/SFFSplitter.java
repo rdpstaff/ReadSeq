@@ -20,15 +20,13 @@ import edu.msu.cme.rdp.readseq.readers.core.SFFCore;
 import edu.msu.cme.rdp.readseq.readers.core.SFFCore.CommonHeader;
 import edu.msu.cme.rdp.readseq.readers.core.SFFCore.ReadBlock;
 import edu.msu.cme.rdp.readseq.writers.SFFWriter;
-import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.io.PrintStream;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,12 +44,13 @@ public class SFFSplitter {
         CommonHeader ch = core.getCommonHeader();
 
         Map<String, SFFWriter> outputMap = new HashMap();
-        Map<String, PrintStream> idOutputMap = new HashMap();
+        Map<String, PrintWriter> idOutputMap = new HashMap();
 
         for (String sample : new HashSet<String>(barcodeToSample.values())) {
             File outFile = new File(directory, sample + ".sff");
             outputMap.put(sample, new SFFWriter(outFile, ch, core.getManifest()));
-            idOutputMap.put(sample, new PrintStream(new File(directory, sample + "_seqids.txt")));
+            // allow to append to existing seqid files if multiple tags belong to the same sample            
+            idOutputMap.put(sample, new PrintWriter(new FileWriter(new File(directory, sample + "_seqids.txt"), true)));
         }
 
         try {
@@ -70,7 +69,7 @@ public class SFFSplitter {
                         String sample = barcodeToSample.get(barcode);
 
                         outputMap.get(sample).writeReadBlock(rb);
-                        idOutputMap.get(sample).println(rb.getName());
+                        idOutputMap.get(sample).println(rb.getName());                            
                         break;
                     }
                 }
@@ -80,7 +79,7 @@ public class SFFSplitter {
             for (SFFWriter os : outputMap.values()) {
                 os.close();
             }
-            for (PrintStream out : idOutputMap.values()) {
+            for (PrintWriter out : idOutputMap.values()) {
                 out.close();
             }
         }
@@ -156,7 +155,8 @@ public class SFFSplitter {
 
         
         if (args.length != 3) {
-            System.err.println("USAGE: SFFSplitter <sff_file> <barcode_mapping> <output_dir>");
+            System.err.println("USAGE: SFFSplitter <sff_file> <barcode_mapping> <output_dir> \n" 
+                    + "Caution: The results will be appended the same files in the ouput_dir to if multiple barcodes map to the same sample.");
             return;
         }
 
