@@ -12,14 +12,22 @@ public class GoodWordIterator {
     private int numOfWords = 0;
     private int[] wordIndexArr;
     public static final int DEFAULT_WORDSIZE = 8;
+    public static final int RNA_BASES = 4;  //The number of rna bases (ATGC). Initially set to 4.
     private static int WORDSIZE = DEFAULT_WORDSIZE;    // the size of a word
     private static boolean wordsizeHasSet = false;
     public static final float PERCENT_SELECTION = 0.125f;
     private static int MASK = (1 << (WORDSIZE * 2)) - 1;
     static final int MAX_ASCII = 128;
     private static int[] charIntegerLookup = new int[MAX_ASCII];
+    private final static int[] intComplementLookup = new int[RNA_BASES];
 
     static {
+        // initialize the integer complement look up table
+        intComplementLookup[0] = 1;
+        intComplementLookup[1] = 0;
+        intComplementLookup[2] = 3;
+        intComplementLookup[3] = 2;
+
         // initialize the char to integer mapping table
         for (int i = 0; i < MAX_ASCII; i++) {
             charIntegerLookup[i] = -1;
@@ -211,4 +219,29 @@ public class GoodWordIterator {
         return testWordList;
     }
 
+        /**
+     * Returns the reverse complement of the word in an integer array format.
+     */
+    public static int[] getReversedWord(int[] word) {
+        int length = word.length;
+        int[] reverseWord = new int[length];
+        for (int w = 0; w < length; w++) {
+            reverseWord[length - 1 - w] = intComplementLookup[ word[w]];
+        }
+        return reverseWord;
+    }
+
+    /**
+     * Returns an integer representation of a single word.
+     */
+    public static int getWordIndex(int[] word) {
+        int wordIndex = 0;
+        for (int w = 0; w < word.length; w++) {
+            wordIndex <<= 2;
+            wordIndex = wordIndex & (MASK);
+            wordIndex = wordIndex | word[w];
+        }
+        return wordIndex;
+    }
+    
 }
