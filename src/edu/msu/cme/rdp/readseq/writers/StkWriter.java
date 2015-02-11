@@ -24,6 +24,10 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
 
 /**
  *
@@ -137,23 +141,44 @@ public class StkWriter implements SequenceWriter {
         writer.close();
     }
     
-    public static void main(String[] args) throws Exception{        
-        if ( args.length != 2 && args.length != 3){
-            throw new Exception("Usage: infile outfile <header>");
-        }
+    public static void main(String[] args) throws Exception{   
+        Options options = new Options();
+        options.addOption("r", "removeref", false, "is set, do not write the GC reference sequences to output");
+        options.addOption("h", "header", true, "the header of the output file in case a differenet stk version, default is " + STK_HEADER);
         String header = STK_HEADER;
-        if ( args.length == 3){
-            header = args[2];
+        boolean removeRef = false;
+
+        try {
+            CommandLine line = new PosixParser().parse(options, args);
+
+            if (line.hasOption("removeref")) {
+                removeRef = true;
+            }            
+            if (line.hasOption("header")) {
+                header = line.getOptionValue("header");
+            }
+
+            args = line.getArgs();
+            if ( args.length < 2){
+                throw new Exception("Need input and output files");
+            }
+
+        } catch (Exception e) {
+            new HelpFormatter().printHelp("USAGE: to-stk <input-file> <out-file>", options);
+            System.err.println("ERROR: " + e.getMessage());
+            System.exit(1);
+            return;
         }
-         
-        System.err.println(header);
-        //StkWriter.writeSequences(new SequenceReader(new File(args[0])), new PrintStream(new File(args[1])), header);
+                
         SequenceReader reader = new SequenceReader(new File(args[0]));        
         PrintStream out = new PrintStream(new File(args[1]));
         StkWriter writer = new StkWriter(reader, out, header);
         reader = new SequenceReader(new File(args[0]));
         Sequence seq;
         while ( (seq = reader.readNextSequence()) !=  null) {
+            if ( seq.getSeqName().startsWith("#") && removeRef){
+                continue;
+            }
             writer.writeSeq(seq);
         }
         writer.writeEndOfBlock();

@@ -49,7 +49,6 @@ public class QualityTrimmer {
 
         FastqWriter fastqOut = null;
         FastaWriter fastaOut = null;
-        FastaWriter qualOut = null;
 
         byte qualTrim = -1;
 
@@ -123,7 +122,6 @@ public class QualityTrimmer {
             String outStem = "trimmed_" + seqFile.getName().substring(0, seqFile.getName().lastIndexOf("."));
             if (writeFasta) {
                 fastaOut = new FastaWriter(outStem + ".fasta");
-                qualOut = new FastaWriter(outStem + ".qual");
             } else {
                 fastqOut = new FastqWriter(outStem + ".fastq", FastqCore.Phred33QualFunction);
             }
@@ -191,14 +189,13 @@ public class QualityTrimmer {
                 lengthHisto[len]++;
 
                 if (outSeq.length() == 0) {
-                    System.err.println(qseq.getSeqName() + ": length 0 after trimming");
+                    //System.err.println(qseq.getSeqName() + ": length 0 after trimming");
                     zeroLengthAfterTrimming++;
                     continue;
                 }
 
                 if (writeFasta) {
                     fastaOut.writeSeq(qseq.getSeqName(), qseq.getDesc(), outSeq);
-                    qualOut.writeRawQual(qseq.getSeqName(), outQual);
                 } else {
                     fastqOut.writeSeq(qseq.getSeqName(), qseq.getDesc(), outSeq, outQual);
                 }
@@ -208,7 +205,6 @@ public class QualityTrimmer {
 
             if (writeFasta) {
                 fastaOut.close();
-                qualOut.close();
             } else {
                 fastqOut.close();
             }

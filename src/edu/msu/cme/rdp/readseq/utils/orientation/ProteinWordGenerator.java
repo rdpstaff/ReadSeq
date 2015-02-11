@@ -31,7 +31,7 @@ public class ProteinWordGenerator {
     
     public ProteinWordGenerator(int wordSize){
         if ( wordSize < 3 || wordSize > 6){
-            System.out.println("Warning: recommended word size is " + WORDSIZE + ", or range [3-6]");
+           // System.out.println("wordsize used: " + wordSize + ". Warning: recommended word size is " + WORDSIZE + ", or range [3-6]");
         }
         this.wordSize = wordSize;
     }

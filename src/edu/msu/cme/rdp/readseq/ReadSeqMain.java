@@ -22,6 +22,7 @@ import edu.msu.cme.rdp.readseq.utils.RevComplement;
 import edu.msu.cme.rdp.readseq.utils.RmDupSeqs;
 import edu.msu.cme.rdp.readseq.utils.SeqFileSplitter;
 import edu.msu.cme.rdp.readseq.utils.SequenceSelector;
+import edu.msu.cme.rdp.readseq.writers.StkWriter;
 import java.util.Arrays;
 
 /**
@@ -37,7 +38,8 @@ public class ReadSeqMain {
                 "\n\tselect-seqs    - select or deselect sequences from a file" +
                 "\n\tsplit          - split sequences" +  
                 "\n\tto-fasta       - convert to fasta format" +
-                "\n\tto-fastq       - convert to fastq format" ;
+                "\n\tto-fastq       - convert to fastq format" +
+                "\n\tto-stk         - convert to stk format" ;
         if(args.length == 0 ) {
             System.err.println(usage);
             return;
@@ -58,7 +60,9 @@ public class ReadSeqMain {
             ToFasta.main(newArgs);
         }else if(cmd.equals("to-fastq")) {
             ToFastq.main(newArgs);
-        } else if(cmd.equals("split")) {
+        }else if(cmd.equals("to-stk")) {
+            StkWriter.main(newArgs);
+        }else if(cmd.equals("split")) {
             SeqFileSplitter.main(newArgs);
         } else {
             System.err.println("ERROR: " + "wrong subcommand");

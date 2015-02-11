@@ -2,6 +2,7 @@ package edu.msu.cme.rdp.readseq.stat;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -52,6 +53,35 @@ public class StdevCal {
         return stdResult;
     }
     
+    
+    public static double calMean(ArrayList<Double> valList){
+        double totalCount = 0.0;
+        double valSum = 0;
+        for ( Double d: valList){
+            if ( !d.isNaN()){
+                valSum += d.doubleValue();
+                totalCount++;
+            }
+        }
+        if ( totalCount == 0){
+            return 0;
+        }else {
+            return valSum/totalCount;
+        }
+    }
+    
+    //calculate median
+    public static double calMedian(ArrayList<Double> valList){
+        Collections.sort(valList);
+        int middle = valList.size()/2;
+        double medianValue = 0; //declare variable 
+        if (valList.size()%2 == 1) 
+            medianValue = valList.get(middle);
+        else
+           medianValue = (valList.get(middle-1) + valList.get(middle)) / 2;
+
+        return medianValue;
+    }
 
     public static void main(String[] args){
         ArrayList<Double> valList = new ArrayList<Double>();
@@ -63,6 +93,8 @@ public class StdevCal {
         valList.add(15.0);
         Std result = StdevCal.calStd(valList);
         System.out.println("totalCount= " + result.totalCount + " mean= " + result.mean + " std=" + result.stdev);
+        System.out.println("mean " + StdevCal.calMean(valList));
+        System.out.println("median " + StdevCal.calMedian(valList));
     }
 
 }

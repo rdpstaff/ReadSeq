@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -26,8 +27,8 @@ import java.util.TreeSet;
  */
 public class ProteinSeqMatch extends KmerMatchCore{
     
-    private HashMap<String, HashSet<String>> refWordMap = new HashMap<String, HashSet<String>>();
-    private HashMap<String, Sequence> refSeqMap = new HashMap<String, Sequence>();
+    private ConcurrentHashMap<String, HashSet<String>> refWordMap = new ConcurrentHashMap<String, HashSet<String>>();
+    private ConcurrentHashMap<String, Sequence> refSeqMap = new ConcurrentHashMap<String, Sequence>();
     private ProteinWordGenerator proteinWordGenerator = null;
     private static final float SabThreshold = 0.6f; //
      
@@ -36,8 +37,7 @@ public class ProteinSeqMatch extends KmerMatchCore{
         SequenceReader parser = new SequenceReader(new File(seqFile));
         Sequence seq;
         while ( (seq = parser.readNextSequence()) != null) {            
-            refSeqMap.put(seq.getSeqName(), seq);
-            refWordMap.put(seq.getSeqName(), proteinWordGenerator.parseProtein(SeqUtils.getUnalignedSeqString(seq.getSeqString())) );
+            addRefSeq(seq);
         }
         parser.close();         
      }     
@@ -50,11 +50,15 @@ public class ProteinSeqMatch extends KmerMatchCore{
         proteinWordGenerator = new ProteinWordGenerator(wordSize);
         // initialize the protein words 
         for (Sequence seq: refSeqs){
-            refSeqMap.put(seq.getSeqName(), seq);
-            refWordMap.put(seq.getSeqName(), proteinWordGenerator.parseProtein(SeqUtils.getUnalignedSeqString(seq.getSeqString())) );
+            addRefSeq(seq);
         }
     }
     
+    public synchronized void addRefSeq(Sequence seq){
+        refSeqMap.put(seq.getSeqName(), seq);
+        refWordMap.put(seq.getSeqName(), proteinWordGenerator.parseProtein(SeqUtils.getUnalignedSeqString(seq.getSeqString())) );
+        
+    }
     
     /*
     * This program take a nucleotide or protein sequence, returns the top k best matching reference sequences
