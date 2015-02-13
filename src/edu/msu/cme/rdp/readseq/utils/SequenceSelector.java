@@ -65,7 +65,8 @@ public class SequenceSelector {
         while ((line = reader.readLine()) != null) {
             line = line.trim();
             if (!line.equals("")) {
-                ids.add(line);
+                String[] val = line.split("\\s+");
+                ids.add(val[0]);
             }
         }
         reader.close();
