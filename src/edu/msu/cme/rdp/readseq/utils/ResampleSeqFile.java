@@ -157,7 +157,7 @@ public class ResampleSeqFile {
         Set<String> selectedSeqIDs = new HashSet<String>();
         for ( int index: selectedIndexSet){
             selectedSeqIDs.add((String) seqIdSet[index]);
-            System.err.println(seqIdSet[index]);
+            
         } 
         return selectedSeqIDs;
     }
