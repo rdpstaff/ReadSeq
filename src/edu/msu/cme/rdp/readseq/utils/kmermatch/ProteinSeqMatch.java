@@ -57,7 +57,10 @@ public class ProteinSeqMatch extends KmerMatchCore{
     public synchronized void addRefSeq(Sequence seq){
         refSeqMap.put(seq.getSeqName(), seq);
         refWordMap.put(seq.getSeqName(), proteinWordGenerator.parseProtein(SeqUtils.getUnalignedSeqString(seq.getSeqString())) );
-        
+    }
+    
+    public Sequence getRefSeq(String seqName){
+        return refSeqMap.get(seqName);
     }
     
     /*
@@ -92,6 +95,7 @@ public class ProteinSeqMatch extends KmerMatchCore{
                 tempBestSab = sab;
             }
             orderedResultSet.add( new BestMatch(target, sab, false));
+            
         }
         
         if(seqtype == SequenceType.Nucleotide && tempBestSab < this.SabThreshold) {  // check reverse
