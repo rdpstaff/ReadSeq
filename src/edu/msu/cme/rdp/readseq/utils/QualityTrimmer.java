@@ -43,9 +43,10 @@ public class QualityTrimmer {
 
     public static void main(String[] args) throws Exception {
         Options options = new Options();
-        options.addOption("f", "fastq-out", false, "Write fastq instead of fasta file");
+        options.addOption("f", "fastq-out", false, "Write fastq instead of fasta file, offset 33 (#)");
         options.addOption("l", "less-than", false, "Trim at <= instead of strictly =");
         options.addOption("i", "illumina", false, "Illumina trimming mode");
+        options.addOption("m", "min_seq_length", true, "filter sequence by minimum sequence length, default is 1");
 
         FastqWriter fastqOut = null;
         FastaWriter fastaOut = null;
@@ -55,9 +56,11 @@ public class QualityTrimmer {
         boolean writeFasta = true;
         boolean trimle = false;
         boolean illumina = false;
+        int length = 1;
 
         List<SeqReader> readers = new ArrayList();
         List<File> seqFiles = new ArrayList();
+        FastqCore.QualityFunction  qualityFunction = FastqCore.Phred33QualFunction;
 
         try {
             CommandLine line = new PosixParser().parse(options, args);
@@ -72,7 +75,11 @@ public class QualityTrimmer {
             if (line.hasOption("illumina")) {
                 illumina = true;
             }
-
+            
+            if (line.hasOption("min_seq_length")) {
+                length = Integer.parseInt(line.getOptionValue("min_seq_length"));
+            }
+            
             args = line.getArgs();
 
             if (args.length < 2) {
@@ -83,7 +90,7 @@ public class QualityTrimmer {
                 throw new Exception("Expected single character quality score");
             }
 
-            qualTrim = FastqCore.Phred33QualFunction.translate(args[0].charAt(0));
+            qualTrim = qualityFunction.translate(args[0].charAt(0));
 
             for (int index = 1; index < args.length; index++) {
                 File seqFile = new File(args[index]);
@@ -112,7 +119,8 @@ public class QualityTrimmer {
                 seqFiles.add(seqFile);
             }
         } catch (Exception e) {
-            new HelpFormatter().printHelp("USAGE: QualityTrimmer [options] <ascii_score> <seq_file> [qual_file]", options, true);
+            new HelpFormatter().printHelp("USAGE: QualityTrimmer [options] <ascii_score> <seq_file> [qual_file]",
+                    "This program trims off the trailing bases with ascii_score. Use ascii_score of 33 for '#', 64 for 'B'\n", options, "", true);
 	    System.err.println("Error: " + e.getMessage());
             System.exit(1);
         }
@@ -191,6 +199,9 @@ public class QualityTrimmer {
                 if (outSeq.length() == 0) {
                     //System.err.println(qseq.getSeqName() + ": length 0 after trimming");
                     zeroLengthAfterTrimming++;
+                    continue;
+                }
+                if (outSeq.length() < length) {
                     continue;
                 }
 

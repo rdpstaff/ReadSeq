@@ -17,6 +17,7 @@
 
 package edu.msu.cme.rdp.readseq;
 
+import edu.msu.cme.rdp.readseq.utils.QualityTrimmer;
 import edu.msu.cme.rdp.readseq.utils.ResampleSeqFile;
 import edu.msu.cme.rdp.readseq.utils.RevComplement;
 import edu.msu.cme.rdp.readseq.utils.RmDupSeqs;
@@ -31,7 +32,8 @@ import java.util.Arrays;
  */
 public class ReadSeqMain {
     public static void main(String [] args) throws Exception {
-        String usage = "USAGE: ReadSeqMain <subcommand> <subcommand args ...>" +                
+        String usage = "USAGE: ReadSeqMain <subcommand> <subcommand args ...>" +  
+                "\n\tquality-trim   - trim input fastq based on quality score" +
                 "\n\trandom-sample  - random select a subset or subregion of sequences" +
                 "\n\treverse-comp   - reverse complement sequences" +
                 "\n\trm-dupseq      - remove identical or substring of sequences" + 
@@ -50,6 +52,8 @@ public class ReadSeqMain {
 
         if(cmd.equals("select-seqs")) {
             SequenceSelector.main(newArgs);
+        }else if(cmd.equals("quality-trim")) {
+            QualityTrimmer.main(newArgs);
         }else if(cmd.equals("random-sample")) {
             ResampleSeqFile.main(newArgs);
         }else if(cmd.equals("reverse-comp")) {
