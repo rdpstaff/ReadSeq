@@ -50,6 +50,18 @@ public class FastqCore extends SeqReaderCore {
 
     };
 
+    public static final QualityFunction Phred64QualFunction = new QualityFunction() {
+
+        public byte translate(char c) {
+            return (byte)(c - 33);
+        }
+
+        public char translate(byte q) {
+            return (char)(((q <= 124) ? q : 124) + 2);
+        }
+
+    };
+    
     private QualityFunction qualFunction;
 
     public FastqCore(File seqFile) throws IOException {

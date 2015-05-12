@@ -91,6 +91,9 @@ public class QualityTrimmer {
             }
 
             qualTrim = qualityFunction.translate(args[0].charAt(0));
+            if ( qualTrim != 2 && qualTrim != 33){
+                throw new Exception("Expected single character quality score, B or #");
+            }
 
             for (int index = 1; index < args.length; index++) {
                 File seqFile = new File(args[index]);
@@ -120,7 +123,7 @@ public class QualityTrimmer {
             }
         } catch (Exception e) {
             new HelpFormatter().printHelp("USAGE: QualityTrimmer [options] <ascii_score> <seq_file> [qual_file]",
-                    "This program trims off the trailing bases with ascii_score. Use ascii_score of 33 for '#', 64 for 'B'\n", options, "", true);
+                    "This program trims off the trailing bases with ascii_score. Use '#' for qscore offset of 33, 'B' for offset 64\n", options, "", true);
 	    System.err.println("Error: " + e.getMessage());
             System.exit(1);
         }
@@ -131,7 +134,11 @@ public class QualityTrimmer {
             if (writeFasta) {
                 fastaOut = new FastaWriter(outStem + ".fasta");
             } else {
-                fastqOut = new FastqWriter(outStem + ".fastq", FastqCore.Phred33QualFunction);
+                if ( qualTrim == 2) {
+                    fastqOut = new FastqWriter(outStem + ".fastq", FastqCore.Phred33QualFunction);
+                } else if ( qualTrim == 33){ // fastq writer is different for different offset, because we output qscore of offset 33 only
+                    fastqOut = new FastqWriter(outStem + ".fastq", FastqCore.Phred64QualFunction);
+                } 
             }
 
             int[] lengthHisto = new int[200];
