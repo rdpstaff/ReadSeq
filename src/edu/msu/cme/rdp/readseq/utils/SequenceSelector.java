@@ -29,6 +29,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
 
 /**
  *
@@ -36,13 +40,34 @@ import java.util.Set;
  */
 public class SequenceSelector {
 
+    private static final Options options = new Options();
+    
+    static {
+        options.addOption("s", "seq_length", true, "minimum length of sequence");
+    }
     public static void main(String[] args) throws IOException {
-        if (args.length < 5) {
-            System.err.println("USAGE: SequenceSelector ids_file outfile outputformat keep[Y|N] seqfile(s) \n"  +
-             "Input format is fasta or fastq. The outputformat can be either fasta or fastq if inputs are fastq\n" + 
-             "Default is to keep the sequences in the ids_file. If keep is false or N, the sequences will be removed from output ");
-            System.exit(1);
-        }
+        int min_length = 1;
+        try{
+            CommandLine line = new PosixParser().parse(options, args);           
+            if ( line.hasOption("seq_length")){
+                min_length = Integer.parseInt(line.getOptionValue("seq_length"));
+                if ( min_length < 1){
+                    throw new Exception("seq_length should be at least 1");
+                }
+            }             
+            args = line.getArgs();
+            if (args.length < 5) {
+                throw new Exception("Incorrect number of command line arguments");
+            }
+           
+        }catch(Exception e){
+            new HelpFormatter().printHelp(120, "[options] ids_file outfile outputformat keep[Y|N] seqfile(s)\n" +
+                    "The outputformat can be either fasta or fastq if inputs are fastq\n" +
+                    "Default is to keep the sequences in the ids_file. If keep is false or N, the sequences will be removed from output ", "", options, "");
+            System.out.println("ERROR: " + e.getMessage());
+            return;
+        } 
+        
 
         File idFile = new File(args[0]);        
         SequenceWriter out = null;     
@@ -83,21 +108,26 @@ public class SequenceSelector {
             
             contains = ids.contains(seq.getSeqName());
             if ((contains && keep) || (!contains && !keep)) {
-                out.writeSeq(seq);
+                if ( seq.getSeqString().length() >= min_length){
+                    out.writeSeq(seq);
+                }
                 if ( keep){
                     foundIds.add(seq.getSeqName());
                 }
+                
             }
 
             while ((seq = seqReader.readNextSequence()) != null) {
                 contains = ids.contains(seq.getSeqName());
                 if ((contains && keep) || (!contains && !keep)) {
-                    out.writeSeq(seq);
+                    if ( seq.getSeqString().length() >= min_length){
+                        out.writeSeq(seq);
+                    }
                     if ( keep ){
                         foundIds.add(seq.getSeqName());
                         if (foundIds.size() == ids.size()) {
                             break;
-                        }
+                        }                    
                     }
                 }
                
