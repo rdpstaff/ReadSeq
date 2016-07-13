@@ -4,13 +4,13 @@
  */
 package edu.msu.cme.rdp.readseq.utils;
 
+import edu.msu.cme.rdp.readseq.QSequence;
 import edu.msu.cme.rdp.readseq.SequenceFormat;
 import edu.msu.cme.rdp.readseq.readers.Sequence;
 import edu.msu.cme.rdp.readseq.readers.SequenceReader;
+import edu.msu.cme.rdp.readseq.readers.core.FastqCore;
 import edu.msu.cme.rdp.readseq.utils.orientation.OrientationChecker;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import org.apache.commons.cli.CommandLine;
@@ -22,7 +22,8 @@ import org.apache.commons.cli.PosixParser;
  *
  * @author wangqion
  */
-public class RevComplement {            
+public class RevComplement {  
+    
     private static final Options options = new Options();
     static {
         options.addOption("i", "infile", true, "input fasta file"); 
@@ -38,11 +39,21 @@ public class RevComplement {
         }
         return qual.toString();
     }
-   
+    
+    public static String revQualityString( byte[] qualSeq, FastqCore.QualityFunction qualFunction){
+        StringBuilder qual = new StringBuilder();
+        for(byte b : qualSeq) {
+            qual.insert(0, qualFunction.translate(b));
+        }
+        
+        return qual.toString();
+    }
     
     public static void main(String[] args) throws IOException {
         boolean checkOrientation = false;
         SequenceFormat outFormat = SequenceFormat.FASTA;
+        FastqCore.QualityFunction qualFunction = FastqCore.Phred33QualFunction;
+        
         File infile;
         File outfile ;
         try{
@@ -102,26 +113,29 @@ public class RevComplement {
             }
             reader.close();
         } else if ( format == SequenceFormat.FASTQ) {
-            BufferedReader reader = new BufferedReader(new FileReader(infile));
-            String line = null;
-            while (  (line=reader.readLine()) != null){
-                String seqID = line;
-                String seqString = reader.readLine();
-                String qualID = reader.readLine();
-                String qualString = reader.readLine();
+            SequenceReader qRreader = new SequenceReader(infile);
+            QSequence seq = null;
+            while ( ( seq = (QSequence)qRreader.readNextSequence()) != null){
+                String seqString = seq.getSeqString();
+                String qualString = null;
+            
                 if ( checkOrientation) {
                     if ( checker.isSeqReversed(seqString)){
                         seqString = IUBUtilities.reverseComplement(seqString);
-                        qualString = revQualityString(qualString);
+                        if ( outFormat == SequenceFormat.FASTQ){
+                            qualString = revQualityString(seq.getQuality(), qualFunction);
+                        }
                     }
                 }else {
                     seqString = IUBUtilities.reverseComplement(seqString);
-                    qualString = revQualityString(qualString);
+                    if ( outFormat == SequenceFormat.FASTQ){
+                        qualString = revQualityString(seq.getQuality(), qualFunction);
+                    }
                 }
                 if ( outFormat == SequenceFormat.FASTQ){
-                    out.println( seqID  + "\n" + seqString + "\n+" + "\n" + qualString);
+                    out.println( seq.getSeqName()  + "\n" + seqString + "\n+" + "\n" + qualString);
                 }else {
-                    out.println( seqID  + "\n" + seqString);
+                    out.println( ">" + seq.getSeqName()  + "\n" + seqString);
                 }
             }
            
