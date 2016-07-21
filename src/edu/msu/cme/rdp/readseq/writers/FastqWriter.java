@@ -81,7 +81,7 @@ public class FastqWriter implements SequenceWriter {
     }
     
     public void writeSeq(String seqid, String desc, String seqString, byte[] qualSeq) {
-        out.println("@" + seqid + "  " + desc);
+        out.println("@" + seqid + " " + desc);
         out.println(seqString);
         out.println("+");
         StringBuffer qual = new StringBuffer();
